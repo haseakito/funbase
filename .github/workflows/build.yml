@@ -1,0 +1,65 @@
+name: Build Test
+
+# defines when the events triggered
+on:
+    push:
+        branches: [ main ]
+    
+    pull_request:
+        branches: [ main ]
+
+jobs:
+    build:
+        # defines a runner os
+        runs-on: ubuntu-latest
+
+        # defines a series of steps this workflow goes through 
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            
+              # Set up Nodejs
+            - name: Set up Nodejs
+              uses: actions/setup-node@v3
+              with:
+                node-version: 18
+                cache: npm
+
+            # Cache node_modules for fater build
+            - name: Cache node_modules
+              uses: actions/cache@v3
+              id: node_modules_cache_id
+              env:
+                cache_name: cache-node-modules
+              with:
+                path: '**/node_modules'
+                key: ${{ runner.os }}-build-${{ env.cache_name }}-${{ hashFiles('**/package-lock.json') }}
+
+              # If there's no cache for it, install the dependencies
+            - name: Install dependencies
+              if: ${{ steps.node_modules_cache_id.outputs.cache-hit != 'true' }}
+              run: |
+                npm i
+
+              # Build the project
+            - name: Build
+              run: |
+                npm run build
+
+              # Send success notification to Discord 
+            - name: Discord Notification on Success
+              if: ${{ success() }}
+              uses: Ilshidur/action-discord@master
+              env:
+                DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+              with:
+                args: 'The Project Successfully build!:rocket:'
+
+              # Send failure notification to Discord 
+            - name: Discord Notification on Success
+              if: ${{ failure() }}
+              uses: Ilshidur/action-discord@master
+              env:
+                DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+              with:
+                args: 'The Project build Unsccessfull!:poop:'
