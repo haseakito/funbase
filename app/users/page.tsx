@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { Spinner } from '@chakra-ui/react'
+import { Spinner } from '@/components/Chakra'
 import { ProfileCard } from '@/components/ProfileCard'
 
 export default function page() {
