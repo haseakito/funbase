@@ -1,0 +1,19 @@
+# Specify which verison to use
+version: '3.9'
+
+# Specify the details of this container
+services:
+  db:
+    image: postgres
+    container_name: funbase_db
+    ports:
+      - 5432:5432
+    volumes:
+      - db_store:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+# Volume mount the PostgreSQL data
+volumes:
+  db_store:
