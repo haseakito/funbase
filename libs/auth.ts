@@ -8,7 +8,7 @@ import bcrypt from 'bcrypt'
 
 export const authOptions: NextAuthOptions = {
     pages: {
-        signIn: '/auth/login',               
+        signIn: '/auth/login'            
     },
     secret: process.env.NEXT_AUTH_SECRET,
     adapter: PrismaAdapter(prisma),
