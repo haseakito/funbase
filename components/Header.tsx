@@ -1,11 +1,11 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Logo from '@/public/Funbase.svg'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSession, signIn, signOut } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
-import { useAuthContext } from './AuthController'
 import {
     MdLogin,
     MdLogout,
@@ -20,7 +20,7 @@ import {
     DrawerContent,    
     DrawerCloseButton,
     useDisclosure,    
-} from '@chakra-ui/react'
+} from './Chakra'
 import { HeaderData, SidebarData } from '@/utils/Constant'
 
 export function Header() {
@@ -28,8 +28,8 @@ export function Header() {
     // Get the current url path name
     const path = usePathname()
 
-    // Hooks handling user auth
-    const useAuth = useAuthContext()
+    // Hooks handling the user session
+    const { data: session, status } = useSession()
 
     // 
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -63,9 +63,9 @@ export function Header() {
                     </Link> 
                 ))}
                 {
-                    useAuth.token ?                            
+                    session ?                            
                         <Link
-                            href='/'
+                            href='/auth/logout'
                             className='flex relative group font-semibold gap-1 h-12 rounded-md p-3 hover:scale-95 duration-300'
                         >
                             Log out <MdLogout size={25} />
@@ -74,9 +74,9 @@ export function Header() {
                         </Link>
                         :
                         <Link
-                            href='/login'
+                            href='/auth/login'
                             className={
-                                `${ '/login' === path ?
+                                `${ '/auth/login' === path ?
                                     'font-bold bg-blue-500'
                                     :
                                     'font-semibold hover:bg-blue-500'
@@ -128,12 +128,12 @@ export function Header() {
                     <button
                         className={
                             `${
-                                useAuth ? 
+                                session ? 
                                 'bg-blue-400' : 'bg-red-400'
                             } w-full p-4 rounded font-semibold hover:opacity-90 duration-300`
                         }
                     >
-                        { useAuth.token ? 'Logout' : 'Login' }
+                        { session ? 'Logout' : 'Login' }
                     </button>
                 </DrawerFooter>
             </DrawerContent>

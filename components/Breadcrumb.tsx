@@ -4,7 +4,6 @@ import React, {
     useRef,
     useEffect
 } from 'react'
-import { useAuthContext } from './AuthController'
 import { useRouter } from 'next/navigation'
 import {
     MdDarkMode,
@@ -50,9 +49,6 @@ export function Breadcrumb() {
     // Ref hooks handling button canceling alert modal
     const cancelRef = useRef(null)
 
-    // Hooks handling user auth
-    const useAuth = useAuthContext()
-
     // Hooks handling the router
     const router = useRouter()
 
@@ -60,13 +56,6 @@ export function Breadcrumb() {
     useEffect(() => {
 
     }, [])
-
-    // Side effects handling checking if the user logged in
-    // useEffect(() => {
-    //     if (!useAuth.token) {
-    //         router.push('/login')
-    //     }
-    // }, [useAuth.token])
 
     return (
         <div>
@@ -104,6 +93,7 @@ export function Breadcrumb() {
                     {/* Theme */}
                     <Button
                         mt={1}
+                        onClick={toggleColorMode}
                     >
                         {colorMode === 'light' ? <MdSunny /> : <MdDarkMode />}
                     </Button>
