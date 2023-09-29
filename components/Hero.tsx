@@ -4,14 +4,15 @@ import Image from 'next/image'
 
 export function Hero() {
     return (
-        <div className='mt-20 mx-auto max-w-2xl py-10 md:py-40 lg:py-48'>            
-            <div className='absolute top-10 sm:top-0 md:top-6 p-10 md:w-auto'>
+        <div className='mx-auto max-w-2xl'>
+            <div className='flex justify-center'>
                 <Image
                     src={Logo}
-                    alt=''                    
+                    alt=''
+                    className='w-[400px]'                                      
                 />
             </div>
-            <div className='hidden md:mt-40 mb-8 md:flex md:justify-center'>
+            <div className='mb-8 flex justify-center'>
                 <div className='relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20'>
                     The very best quality and speed.
                     <a href="#" className="pl-1 font-semibold text-indigo-600 hover:opacity-80 duration-300">
@@ -20,7 +21,7 @@ export function Hero() {
                     </a>
                 </div>
             </div>
-            <div className='mt-40 md:mt-5 text-center'>
+            <div className='md:mt-20 text-center'>
                 <h1>
                     The platform where <span className='text-transparent bg-clip-text font-bold bg-gradient-to-br from-purple-300 via-purple-400 to-purple-800'>creators</span> and <span className='text-transparent bg-clip-text font-bold bg-gradient-to-r from-pink-400 to-pink-600'>fans</span> can connect
                 </h1>

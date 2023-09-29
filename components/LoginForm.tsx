@@ -4,7 +4,7 @@ import React, {
     useState,
     useEffect
 } from 'react'
-import { useAuthContext } from './AuthController'
+import { useSession, signIn, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { LoginFormProps } from '@/utils/types/User'
 import {
@@ -18,7 +18,11 @@ import {
     MdError,
     MdCheckCircle
 } from 'react-icons/md'
-import { FaExternalLinkAlt } from 'react-icons/fa'
+import {
+    FaExternalLinkAlt,
+    FaGoogle,
+    FaFacebook
+} from 'react-icons/fa'
 import {
     Text,
     Button,
@@ -29,8 +33,11 @@ import {
     Input,
     Tooltip,
     useToast,
-    useDisclosure
-} from '@chakra-ui/react'
+    useDisclosure,
+    Box,
+    Divider,
+    AbsoluteCenter
+} from './Chakra'
 import Link from 'next/link'
 import { ResetModal } from './ResetModal'
 
@@ -43,8 +50,8 @@ export function LoginForm() {
     //
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    // Hooks handling user auth
-    const useAuth = useAuthContext()
+    // Hooks handling the user session
+    const { data: session, status } = useSession()
 
     // Hooks handling the router
     const router = useRouter()
@@ -52,12 +59,13 @@ export function LoginForm() {
     // Hooks handling showing the toast
     const toast = useToast()
 
-    // Side effects handling checking if the user is already logged in
+    // Side Effects handling checking the user session
     useEffect(() => {
-        if (useAuth.token) {
-            router.push(`/users/${useAuth.token}`)
+        if (status === "authenticated") {
+            router.push(`/profile/`)
         }
-    }, [])
+    }, [status, router])
+
 
     const {
         register,
@@ -69,13 +77,15 @@ export function LoginForm() {
     })
 
     // Function handling submitting user input
-    const onSubmit: SubmitHandler<LoginFormProps> = async (e) => {
+    const onSubmit: SubmitHandler<LoginFormProps> = async (e) => {        
 
-        // Call the login API
-        fetch('', {
-
-        }).then(() => {
-
+        // POST request to log in
+        await signIn('credentials', {
+            email: e.email,
+            password: e.password,
+            redirect: false
+        })
+        .then(() => {
             // Show the success toast
             toast({
                 title: 'Enjoy!',
@@ -85,8 +95,63 @@ export function LoginForm() {
                 isClosable: true
             })
 
-        }).catch(() => {
+            router.push('/profile')
+        })
+        .catch((err) => {
+            // Show the failure toast                    
+            toast({
+                title: err,
+                description: 'Ooops something went wrong!',
+                status: 'error',
+                duration: 3000,
+                isClosable: true
+            })
+        })
+    }
 
+    // Function handling signing in with Google Auth Provider
+    const logInWithGoogle = async () => {
+        await signIn('google')
+        .then(() => {
+            // Show the success toast
+            toast({
+                title: 'Success',
+                description: 'Successfully created an account!',
+                status: 'success',
+                duration: 3000,
+                isClosable: true
+            })
+
+            router.push('/profile')  
+        })
+        .catch(() => {
+            // Show the failure toast
+            toast({
+                title: 'Internal Server Error',
+                description: 'Ooops something went wrong!',
+                status: 'error',
+                duration: 3000,
+                isClosable: true
+            })
+        })
+    }
+
+    // Function handling signing in with Facebook Auth Provider
+    const logInWithFacebook = async () => {
+        await signIn('facebook')
+        .then(() => {
+            // Show the success toast
+            toast({
+                title: 'Success',
+                description: 'Successfully created an account!',
+                status: 'success',
+                duration: 3000,
+                isClosable: true
+            })
+
+            router.push('/profile')
+        })
+        .catch(() => {
             // Show the failure toast
             toast({
                 title: 'Internal Server Error',
@@ -257,10 +322,34 @@ export function LoginForm() {
                         Log In
                     </Button>
                     <div className='text-center mt-10'>
-                        Don't have an account? <Link href='/signup' className='text-blue-500 hover:underline'>Sign up</Link>
+                        Don't have an account? <Link href='/auth/signup' className='text-blue-500 hover:underline'>Sign up</Link>
                     </div>
                 </Stack>
             </form>
+            <Box position='relative' padding='10'>
+                <Divider />
+                <AbsoluteCenter bg='white' px='4'>
+                    or 
+                </AbsoluteCenter>
+            </Box>
+            <Stack spacing={5}>
+                <Button
+                    colorScheme='gray'
+                    variant='outline'
+                    leftIcon={<FaGoogle />}
+                    onClick={() => logInWithGoogle()}
+                >
+                    Sign in with Google
+                </Button>                
+                <Button
+                    colorScheme='facebook'
+                    variant='outline'
+                    leftIcon={<FaFacebook />}
+                    onClick={() => logInWithFacebook()}
+                >
+                    Sign in with Facebook
+                </Button>
+            </Stack>
         </div>
     )
 }
