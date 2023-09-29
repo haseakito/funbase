@@ -21,3 +21,13 @@ export type ContactFormProps = {
     subject: string,
     details: string,     
 }
+
+export type User = {
+    id: string,
+    name: string,
+    image: string,
+    email: string,
+    bio?: string,
+    following: User[],
+    follower: User[]
+}
