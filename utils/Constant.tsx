@@ -15,12 +15,12 @@ import {
 
 export const HeaderData = [
     {
-        title: 'Creator',
+        title: 'Creators',
         link: '/users'
     },
     {
-        title: 'Marketplace',
-        link: '/market'
+        title: 'Posts',
+        link: '/posts'
     },        
 ]
 
