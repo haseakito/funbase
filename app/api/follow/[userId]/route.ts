@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { authOptions } from "@/libs/auth"
 import { getServerSession } from "next-auth"
 import { prisma } from "@/libs/db"
@@ -9,7 +9,7 @@ import { prisma } from "@/libs/db"
  * @param param
  * @returns NextResponse
  */
-export async function POST({ param }: { param: { userId: string }}) {
+export async function POST(req: NextRequest, { param }: { param: { userId: string }}) {
     // Protect this API route by checking the session
     const session = await getServerSession(authOptions)
 
@@ -46,7 +46,7 @@ export async function POST({ param }: { param: { userId: string }}) {
  * @param param
  * @returns NextResponse
  */
-export async function DELETE({ param }: { param: { userId: string }}) {
+export async function DELETE(req: NextRequest, {param }: { param: { userId: string }}) {
     // Protect this API route by checking the session
     const session = await getServerSession(authOptions)
 
