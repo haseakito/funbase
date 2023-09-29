@@ -10,7 +10,7 @@ export const authOptions: NextAuthOptions = {
     pages: {
         signIn: '/auth/login'            
     },
-    secret: process.env.NEXT_AUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
     adapter: PrismaAdapter(prisma),
     providers: [
         // Google Provider
@@ -26,8 +26,8 @@ export const authOptions: NextAuthOptions = {
         CredentialsProvider({
             name: "credentials",
             credentials: {                
-                email: {},
-                password: {}
+                email: { label: 'email', type: 'email', },
+                password: { label: 'password', type: 'password'}
             },
             async authorize(credentials) {
 
@@ -64,4 +64,26 @@ export const authOptions: NextAuthOptions = {
             }
         })
     ],
+    callbacks: {
+        async jwt({ token, user, session }) {
+            console.log('JWT', { token, user, session })       
+            if (user) {
+                return {
+                    ...token,
+                    id: user.id
+                }
+            }
+            return token
+        },
+        async session({ session, token, user }) {
+            console.log('Session', { token, user, session })
+            return {
+                ...session,
+                user: {
+                    ...session.user,
+                    id: token.id
+                }
+            }                    
+        }
+    }
 }

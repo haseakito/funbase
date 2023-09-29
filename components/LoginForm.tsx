@@ -77,14 +77,12 @@ export function LoginForm() {
     })
 
     // Function handling submitting user input
-    const onSubmit: SubmitHandler<LoginFormProps> = async (e) => {
-
-        // 
-        const data = JSON.stringify(e)
+    const onSubmit: SubmitHandler<LoginFormProps> = async (e) => {        
 
         // POST request to log in
         await signIn('credentials', {
-            data,
+            email: e.email,
+            password: e.password,
             redirect: false
         })
         .then(() => {
@@ -103,6 +101,60 @@ export function LoginForm() {
             // Show the failure toast                    
             toast({
                 title: err,
+                description: 'Ooops something went wrong!',
+                status: 'error',
+                duration: 3000,
+                isClosable: true
+            })
+        })
+    }
+
+    // Function handling signing in with Google Auth Provider
+    const logInWithGoogle = async () => {
+        await signIn('google')
+        .then(() => {
+            // Show the success toast
+            toast({
+                title: 'Success',
+                description: 'Successfully created an account!',
+                status: 'success',
+                duration: 3000,
+                isClosable: true
+            })
+
+            router.push('/profile')  
+        })
+        .catch(() => {
+            // Show the failure toast
+            toast({
+                title: 'Internal Server Error',
+                description: 'Ooops something went wrong!',
+                status: 'error',
+                duration: 3000,
+                isClosable: true
+            })
+        })
+    }
+
+    // Function handling signing in with Facebook Auth Provider
+    const logInWithFacebook = async () => {
+        await signIn('facebook')
+        .then(() => {
+            // Show the success toast
+            toast({
+                title: 'Success',
+                description: 'Successfully created an account!',
+                status: 'success',
+                duration: 3000,
+                isClosable: true
+            })
+
+            router.push('/profile')
+        })
+        .catch(() => {
+            // Show the failure toast
+            toast({
+                title: 'Internal Server Error',
                 description: 'Ooops something went wrong!',
                 status: 'error',
                 duration: 3000,
@@ -285,7 +337,7 @@ export function LoginForm() {
                     colorScheme='gray'
                     variant='outline'
                     leftIcon={<FaGoogle />}
-                    onClick={() => signIn('google')}
+                    onClick={() => logInWithGoogle()}
                 >
                     Sign in with Google
                 </Button>                
@@ -293,7 +345,7 @@ export function LoginForm() {
                     colorScheme='facebook'
                     variant='outline'
                     leftIcon={<FaFacebook />}
-                    onClick={() => signIn('facebook')}
+                    onClick={() => logInWithFacebook()}
                 >
                     Sign in with Facebook
                 </Button>
