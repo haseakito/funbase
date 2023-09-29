@@ -41,6 +41,9 @@ jobs:
               run: |
                 npm i
 
+            - name: Generate Prisma Client
+              run: npx prisma generate
+            
               # Build the project
             - name: Build
               env:

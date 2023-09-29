@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React from 'react'
 import Logo from '@/public/Funbase.svg'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -35,7 +35,7 @@ export function Header() {
     // Hooks handling the user session
     const { data: session, status } = useSession()
 
-    // 
+    // Hooks handling the drawer state
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     // Function handling logging user out
@@ -43,6 +43,7 @@ export function Header() {
         // Close the drawer
         onClose()
 
+        // Logout
         await signOut()
     }
 
@@ -51,10 +52,9 @@ export function Header() {
         // Close the drawer
         onClose()
 
+        // Redirect the user to prompt login
         router.push('/auth/login')
     }
-
-    console.log(session)
 
   return (
     <header>

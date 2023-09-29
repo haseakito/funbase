@@ -78,14 +78,24 @@ export function LoginForm() {
 
     // Function handling submitting user input
     const onSubmit: SubmitHandler<LoginFormProps> = async (e) => {        
-
+                
         // POST request to log in
-        await signIn('credentials', {
+        const res = await signIn('credentials', {
             email: e.email,
             password: e.password,
-            redirect: false
+            redirect: false   
         })
-        .then(() => {
+
+        if (res?.error) {
+            // Show the failure toast                    
+            toast({
+                title: res.error,
+                description: 'Ooops something went wrong!',
+                status: 'error',
+                duration: 3000,
+                isClosable: true
+            })
+        } else {
             // Show the success toast
             toast({
                 title: 'Enjoy!',
@@ -94,19 +104,11 @@ export function LoginForm() {
                 duration: 3000,
                 isClosable: true
             })
-
+            
+            // Redirect the user to their own profile
             router.push('/profile')
-        })
-        .catch((err) => {
-            // Show the failure toast                    
-            toast({
-                title: err,
-                description: 'Ooops something went wrong!',
-                status: 'error',
-                duration: 3000,
-                isClosable: true
-            })
-        })
+        }
+                  
     }
 
     // Function handling signing in with Google Auth Provider
@@ -122,6 +124,7 @@ export function LoginForm() {
                 isClosable: true
             })
 
+            // Redirect the user to their own profile
             router.push('/profile')  
         })
         .catch(() => {
@@ -149,6 +152,7 @@ export function LoginForm() {
                 isClosable: true
             })
 
+            // Redirect the user to their own profile
             router.push('/profile')
         })
         .catch(() => {

@@ -77,7 +77,7 @@ export default function RegisterForm() {
     // Function handling submitting the user input
     const onSubmit: SubmitHandler<RegisterFormProps> = async (e) => {
         
-        axios.post('/api/user', e)
+        await axios.post('/api/user', e)
         .then(() => {
             // Show the success toast
             toast({
@@ -88,6 +88,7 @@ export default function RegisterForm() {
                 isClosable: true
             })
 
+            // Redirect the user to their own profile
             router.push('/profile')
         })
         .catch(() => {
@@ -364,7 +365,7 @@ export default function RegisterForm() {
                     colorScheme='gray'
                     variant='outline'
                     leftIcon={<FaGoogle />}
-                    onClick={() => signIn('google')}
+                    onClick={() => signInWithGoogle()}
                 >
                     Sign in with Google
                 </Button>             
@@ -372,7 +373,7 @@ export default function RegisterForm() {
                     colorScheme='facebook'
                     variant='outline'
                     leftIcon={<FaFacebook />}
-                    onClick={() => signIn('facebook')}
+                    onClick={() => signInWithFacebook()}
                 >
                     Sign in with Facebook
                 </Button>
