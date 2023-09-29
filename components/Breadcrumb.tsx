@@ -1,7 +1,6 @@
 'use client'
 
-import React, {
-    useRef,
+import React, {    
     useEffect
 } from 'react'
 import { useRouter } from 'next/navigation'
@@ -40,14 +39,15 @@ import {
     PopoverHeader,
     PopoverBody,
 } from '@chakra-ui/react'
+import { useSession, signOut } from 'next-auth/react'
 
 export function Breadcrumb() {
 
     // Hooks handling the theme
     const { colorMode, toggleColorMode } = useColorMode()
 
-    // Ref hooks handling button canceling alert modal
-    const cancelRef = useRef(null)
+    // Hooks handling the user session
+    const { data: session, status } = useSession()
 
     // Hooks handling the router
     const router = useRouter()
@@ -72,7 +72,7 @@ export function Breadcrumb() {
                     <li>
                         <div className='flex items-center'>
                             <svg className='w-3 h-3 mx-1 text-gray-400' aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 9 4-4-4-4" />
                             </svg>
                         </div>
                     </li>
@@ -115,49 +115,60 @@ export function Breadcrumb() {
                             </PopoverBody>
                         </PopoverContent>
                     </Popover>
-                    {/* Account avater */}
-                    <Menu>
-                        <MenuButton>
-                            <Avatar name='Dan Abrahmov' src='https://bit.ly/dan-abramov'>
-                                <AvatarBadge boxSize='0.85em' bg='green.500' />
-                            </Avatar>
-                        </MenuButton>
-                        <MenuList>
-                            <MenuItem>
-                                <Link
-                                    href='/profile/'
-                                    className='w-full flex gap-5 font-semibold rounded hover:bg-gray-100 p-2 duration-150'
-                                >
-                                    <FaUser size={20} /> Profile
-                                </Link>
-                            </MenuItem>
-                            <MenuItem>
-                                <Link
-                                    href='/profile/likes'
-                                    className='w-full flex gap-5 font-semibold rounded hover:bg-gray-100 p-2 duration-150'
-                                >
-                                    <FaHeart size={20} /> Likes
-                                </Link>
-                            </MenuItem>
-                            <MenuItem>
-                                <Link
-                                    href='/profile/posts'
-                                    className='w-full flex gap-5 font-semibold rounded hover:bg-gray-100 p-2 duration-150'
-                                >
-                                    <FaShoppingBag size={20} /> Create Post
-                                </Link>
-                            </MenuItem>
-                            <MenuDivider />
-                            <MenuItem mt={7}>
-                                <Link
-                                    href='/'
-                                    className='w-full flex gap-5 font-semibold rounded hover:bg-gray-100 p-2 duration-150'                                    
-                                >
-                                    <MdLogout size={20} /> Logout                                
-                                </Link>
-                            </MenuItem>
-                        </MenuList>
-                    </Menu>
+                    {/* Account avater. If user is logged in, then show their profile image and action bars*/}
+                    {
+                        session?.user?.name ?                   
+                        <Menu>
+                            <MenuButton>
+                                <Avatar name={session.user.name} src={ session.user?.image ? session.user.image : undefined }>
+                                    <AvatarBadge boxSize='0.85em' bg='green.500' />
+                                </Avatar>
+                            </MenuButton>
+                            <MenuList>
+                                <MenuItem>
+                                    <Link
+                                        href='/profile/'                                        
+                                        className='w-full flex gap-5 font-semibold rounded hover:bg-gray-100 p-2 duration-150'
+                                    >
+                                        <FaUser size={20} /> Profile
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem>
+                                    <Link
+                                        href='/profile/likes'
+                                        className='w-full flex gap-5 font-semibold rounded hover:bg-gray-100 p-2 duration-150'
+                                    >
+                                        <FaHeart size={20} /> Likes
+                                    </Link>
+                                </MenuItem>
+                                <MenuItem>
+                                    <Link
+                                        href='/profile/posts'
+                                        className='w-full flex gap-5 font-semibold rounded hover:bg-gray-100 p-2 duration-150'
+                                    >
+                                        <FaShoppingBag size={20} /> Create Post
+                                    </Link>
+                                </MenuItem>
+                                <MenuDivider />
+                                <MenuItem mt={7}>
+                                    <Button
+                                        onClick={() => signOut()}
+                                        className='w-full flex gap-5 font-semibold rounded hover:bg-gray-100 p-2 duration-150'                                    
+                                    >
+                                        <MdLogout size={20} /> Logout                                
+                                    </Button>
+                                </MenuItem>
+                            </MenuList>
+                        </Menu>
+                        :
+                        <Button
+                            onClick={() => router.push('/auth/login')}
+                            variant='outline'
+                            colorScheme='pink'
+                        >
+                            Login
+                        </Button>
+                    }
                 </div>
             </nav>            
         </div>

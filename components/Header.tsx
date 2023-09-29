@@ -5,7 +5,7 @@ import Logo from '@/public/Funbase.svg'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
     MdLogin,
     MdLogout,
@@ -19,14 +19,18 @@ import {
     DrawerOverlay,
     DrawerContent,    
     DrawerCloseButton,
-    useDisclosure,    
+    useDisclosure,
+    Button
 } from './Chakra'
 import { HeaderData, SidebarData } from '@/utils/Constant'
 
 export function Header() {
 
-    // Get the current url path name
+    // Hooks handling getting the current url path name
     const path = usePathname()
+
+    // Hooks handling the router
+    const router = useRouter()
 
     // Hooks handling the user session
     const { data: session, status } = useSession()
@@ -34,9 +38,27 @@ export function Header() {
     // 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
+    // Function handling logging user out
+    const onLogout = async () => {
+        // Close the drawer
+        onClose()
+
+        await signOut()
+    }
+
+    // Function handling redirecting the user to login page
+    const onLogin = () => {
+        // Close the drawer
+        onClose()
+
+        router.push('/auth/login')
+    }
+
+    console.log(session)
+
   return (
     <header>
-        <nav className='flex justify-between bg-yellow-300 rounded-full px-10 md:mx-20 mt-5'>
+        <nav className='flex justify-between bg-yellow-300 rounded-full px-10 md:mx-16 mt-5'>
             {/* Logo */}
             <Image
                 src={ Logo }
@@ -63,15 +85,15 @@ export function Header() {
                     </Link> 
                 ))}
                 {
-                    session ?                            
-                        <Link
-                            href='/auth/logout'
+                    session ?
+                        <Button
+                            onClick={() => signOut()}
                             className='flex relative group font-semibold gap-1 h-12 rounded-md p-3 hover:scale-95 duration-300'
                         >
                             Log out <MdLogout size={25} />
                             <span className='h-1 absolute -bottom-0 left-1/2 w-0 bg-black dark:bg-white transition-all duration-500 group-hover:w-1/3'></span>
                             <span className='h-1 absolute -bottom-0 right-1/2 w-0 bg-black dark:bg-white transition-all duration-500 group-hover:w-1/3'></span>
-                        </Link>
+                        </Button>
                         :
                         <Link
                             href='/auth/login'
@@ -90,7 +112,7 @@ export function Header() {
                 }
             </div>
             <button
-                onClick={onOpen}
+                onClick={ onOpen }
                 className='block md:hidden hover:opacity-90'
             >
                 <MdMenu size={ 50 }  />
@@ -111,33 +133,67 @@ export function Header() {
                         className='-mt-8 w-auto h-24'
                     />
                 </DrawerHeader>
-                <DrawerBody className='space-y-5'>
-                    { SidebarData.map((value, key) => (
-                        <Link
-                            key={ key }
-                            href={ value.link }
-                            className='relative group grid grid-cols-1 text-center font-semibold rounded hover:bg-gray-200 px-4 py-5'
-                        >
-                            { value.title }
-                            <span className='h-1 absolute -bottom-0 left-1/2 w-0 bg-black dark:bg-white transition-all duration-500 group-hover:w-1/3'></span>
-                            <span className='h-1 absolute -bottom-0 right-1/2 w-0 bg-black dark:bg-white transition-all duration-500 group-hover:w-1/3'></span>
-                        </Link>
-                    ))}
-                </DrawerBody>
+                {
+                    session ?
+                    <DrawerBody className='space-y-5'>                    
+                        { SidebarData.map((value, key) => (
+                            <Link
+                                key={ key }
+                                href={ value.link }
+                                onClick={ onClose }
+                                className='relative group grid grid-cols-1 text-center font-semibold rounded hover:bg-gray-200 px-4 py-5'
+                            >
+                                { value.title }
+                                <span className='h-1 absolute -bottom-0 left-1/2 w-0 bg-black dark:bg-white transition-all duration-500 group-hover:w-1/3'></span>
+                                <span className='h-1 absolute -bottom-0 right-1/2 w-0 bg-black dark:bg-white transition-all duration-500 group-hover:w-1/3'></span>
+                            </Link>
+                        ))}
+                    </DrawerBody>
+                    :
+                    <DrawerBody>
+                        { HeaderData.map((value, key) => (
+                            <Link
+                                key={ key }
+                                href={ value.link }
+                                className={
+                                    `${ value.link === path ?
+                                        'font-bold bg-blue-500 rounded-md p-3'
+                                        :
+                                        'hover:bg-blue-500 font-semibold'
+                                    } h-12 group relative inline-block rounded-md p-3 hover:scale-95 duration-300`
+                                }                        
+                            >
+                                { value.title }
+                                <span className='h-1 absolute -bottom-0 left-1/2 w-0 bg-black dark:bg-white transition-all duration-500 group-hover:w-1/3'></span>
+                                <span className='h-1 absolute -bottom-0 right-1/2 w-0 bg-black dark:bg-white transition-all duration-500 group-hover:w-1/3'></span>
+                            </Link> 
+                        ))}
+                    </DrawerBody>
+                }
                 <DrawerFooter>
-                    <button
-                        className={
-                            `${
-                                session ? 
-                                'bg-blue-400' : 'bg-red-400'
-                            } w-full p-4 rounded font-semibold hover:opacity-90 duration-300`
-                        }
+                {
+                    session ?
+                    <Button
+                        onClick={() => onLogout()}
+                        colorScheme='red'
+                        variant='outline'
+                        className='w-full p-4 rounded font-semibold hover:opacity-90 duration-300'
                     >
-                        { session ? 'Logout' : 'Login' }
-                    </button>
+                        Logout
+                    </Button>                     
+                    :
+                    <Button
+                        onClick={() => onLogin()}
+                        colorScheme='blue'
+                        variant='outline'
+                        className='w-full p-4 rounded font-semibold hover:opacity-90 duration-300'
+                    >
+                        Login
+                    </Button>
+                }
                 </DrawerFooter>
             </DrawerContent>
-        </Drawer>     
+        </Drawer>
     </header>
   )
 }
