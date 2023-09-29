@@ -8,7 +8,7 @@ import React from 'react'
  */
 async function getUser(userId: string) {
     // Query the user with the provided user id
-    const res = await fetch(`http://localhost:3000/api/user/${userId}`)
+    const res = await fetch(process.env.URL + `/api/user/${userId}`)
 
     // Check the response status
     if (!res.ok) {

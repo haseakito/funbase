@@ -10,7 +10,7 @@ import { User } from '@/utils/types/User'
  */
 async function getUsers() {
     // Query the users
-    const res = await fetch('http://localhost:3000/api/user')    
+    const res = await fetch(process.env.URL + '/api/user')
 
     // Check the response status
     if (!res.ok) {
@@ -36,12 +36,13 @@ export default async function page() {
         </div>
         <div className=''>
             <div className='space-y-8 lg:grid lg:grid-cols-3 sm:gap-6 xl:gap-10 lg:space-y-0'>
-                { users.map((value, key) => (
+                { users.map((value) => (
                     <Suspense
-                        key={ key }
+                        key={ value.id }
                         fallback={<Spinner thickness='4px' speed='0.65s' emptyColor='gray.200' color='blue.500' size='xl' />}
                     >
-                        <ProfileCard                            
+                        <ProfileCard
+                            key={value.id}                            
                             id={ value.id }
                             name={ value.name }
                             profileImage={ value.image }
