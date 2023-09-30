@@ -89,8 +89,8 @@ export function LoginForm() {
         if (res?.error) {
             // Show the failure toast                    
             toast({
-                title: res.error,
-                description: 'Ooops something went wrong!',
+                title: 'Ooops something went wrong!',
+                description: res.error,
                 status: 'error',
                 duration: 3000,
                 isClosable: true
