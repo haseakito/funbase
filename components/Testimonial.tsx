@@ -4,7 +4,10 @@ export function Testimonial() {
     return (
         <div className="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 lg:px-6">
             <div className="mx-auto max-w-screen-sm">
-                <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Testimonials</h2>
+                <h2 id='testimonial' className="group flex justify-center gap-3 mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+                    <span>Testimonials</span>
+                    <a href='#testimonial' className='ml-2 text-blue-700 opacity-0 transition-opacity dark:text-blue-500 group-hover:opacity-100'>#</a>
+                </h2>
                 <p className="mb-8 font-light text-gray-500 lg:mb-16 sm:text-xl dark:text-gray-400">
                     Listen to what great creators and fans in this platform say about Funbase!
                 </p>
