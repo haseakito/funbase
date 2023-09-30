@@ -1,29 +1,15 @@
 import { Subscription } from '@/components/Subscription'
+import { prisma } from '@/libs/db'
 import React from 'react'
 
-/**
- * Asynchronous function handling getting a specific user
- *  
- * @returns a user obejct
- */
-async function getUser(userId: string) {
-    // Query the user with the provided user id
-    const res = await fetch(`http://localhost:3000/api/user/${userId}`)
-
-    // Check the response status
-    if (!res.ok) {
-        // Redirect to the error.ts
-        throw new Error
-    }
-    // Parse the json body
-    const user = await res.json()
-
-    return user
-}
 export default async function page({ params } : { params: { userId: string } }) {
 
     // Fetch the specific user
-    const user = await getUser(params.userId)
+    const user = await prisma.user.findUnique({
+        where: {
+            id: params.userId
+        }
+    })
     
     const SubscriptionData = [
         {

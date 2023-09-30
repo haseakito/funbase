@@ -4,7 +4,10 @@ export function Feature() {
     return (
         <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
             <div className="max-w-screen-md mb-8 lg:mb-16">
-                <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Designed for creators both big and small</h2>
+                <h2 id='feature' className="group flex justify-start gap-3 mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+                    <span>Designed for creators both big and small</span>
+                    <a href='#feature' className='ml-2 text-blue-700 opacity-0 transition-opacity dark:text-blue-500 group-hover:opacity-100'>#</a>
+                </h2>
                 <p className="text-gray-500 sm:text-xl dark:text-gray-400">Here at Funbase, your prosperity comes pretty easy with us because your job is only to entertain your fun while we handle the rest!</p>
             </div>
             <div className="space-y-8 md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-12 md:space-y-0">

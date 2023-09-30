@@ -47,6 +47,7 @@ jobs:
               # Build the project
             - name: Build
               env:
+                URL: ${{ secrets.URL }}
                 NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
                 GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
                 GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
