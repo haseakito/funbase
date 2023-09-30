@@ -13,7 +13,7 @@ import Link from 'next/link'
 
 type ProfileCardProps ={
     id: string,
-    profileImage: string,
+    profileImage: string | undefined,
     name: string,
     description: string,
 }
@@ -49,8 +49,8 @@ export function ProfileCard(props: ProfileCardProps) {
         .catch((err) => {            
             // Show the error toast
             toast({                
-                title: err.message,
-                description: 'Ooops something went wrong!',
+                title: 'Ooops something went wrong!',
+                description: err.message,
                 status: 'error',
                 duration: 3000,
                 isClosable: true
