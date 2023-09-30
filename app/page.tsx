@@ -20,7 +20,7 @@ export default function Home() {
         <section className='bg-white dark:bg-gray-900'>
             <Statistic />
         </section>
-        <section>
+        <section className='bg-white dark:bg-gray-900'>
             <Feature />
         </section>
         <section className='bg-white dark:bg-gray-900'>
