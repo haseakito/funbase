@@ -47,6 +47,7 @@ model User {
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
+  posts          Post[]
   followers      Follows[] @relation("follower")
   following      Follows[] @relation("following")
   accounts       Account[]
@@ -57,9 +58,9 @@ model User {
 
 // Follow model
 model Follows {
-  follower    User   @relation("follower", fields: [followerId], references: [id])
+  follower    User   @relation("follower", fields: [followerId], references: [id], onDelete: Cascade)
   followerId  String
-  following   User   @relation("following", fields: [followingId], references: [id])
+  following   User   @relation("following", fields: [followingId], references: [id], onDelete: Cascade)
   followingId String
 
   @@id([followerId, followingId])
@@ -71,4 +72,45 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+// Post model
+model Post {
+  id          String              @id @default(cuid())
+  title       String
+  description String?
+  imageUrl    String?
+  muxData     MuxData?
+  categories  CategoriesOnPosts[]
+  price       Float?
+  published   Boolean             @default(false)
+  userId      String
+  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+}
+
+// Category model
+model Category {
+  id    String              @id @default(cuid())
+  name  String              @unique
+  posts CategoriesOnPosts[]
+}
+
+// Categories to Posts model
+model CategoriesOnPosts {
+  post       Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId     String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId String
+
+  @@id([postId, categoryId])
+}
+
+model MuxData {
+  id         String  @id @default(uuid())
+  assetId    String
+  playbackId String?
+  postId     String  @unique
+  post       Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
 }

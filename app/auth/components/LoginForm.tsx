@@ -4,24 +4,24 @@ import React, {
     useState,
     useEffect
 } from 'react'
-import { useRouter } from 'next/navigation'
 import { useSession, signIn, signOut } from 'next-auth/react'
-import { RegisterFormProps } from '@/utils/types/User'
+import { useRouter } from 'next/navigation'
+import { LoginFormProps } from '@/utils/types/User'
 import {
     useForm,
     Controller,
     SubmitHandler
 } from 'react-hook-form'
 import {
-    MdAccountCircle,
-    MdEmail,
     MdKey,
+    MdEmail,
     MdError,
     MdCheckCircle
 } from 'react-icons/md'
 import {
+    FaExternalLinkAlt,
     FaGoogle,
-    FaFacebook,
+    FaFacebook
 } from 'react-icons/fa'
 import {
     Text,
@@ -32,21 +32,23 @@ import {
     InputRightElement,
     Input,
     Tooltip,
-    UnorderedList,
-    ListItem,
+    useToast,
+    useDisclosure,
     Box,
     Divider,
     AbsoluteCenter
-} from './Chakra'
+} from '@chakra-ui/react'
 import Link from 'next/link'
-import axios from 'axios'
-import { useToast } from '@chakra-ui/react'
+import { ResetModal } from '../../../components/ResetModal'
 
 
-export default function RegisterForm() {
+export function LoginForm() {
 
     // Boolean state handling revealing the password
     const [show, setShow] = useState(false)
+
+    //
+    const { isOpen, onOpen, onClose } = useDisclosure()
 
     // Hooks handling the user session
     const { data: session, status } = useSession()
@@ -62,22 +64,84 @@ export default function RegisterForm() {
         if (status === "authenticated") {
             router.push(`/profile/`)
         }
-    }, [status, router])    
+    }, [status, router])
+
 
     const {
         register,
         handleSubmit,
         control,
-        getValues,
         formState: { errors, isSubmitting }
-    } = useForm<RegisterFormProps>({
+    } = useForm<LoginFormProps>({
         mode: 'all'
     })
 
-    // Function handling submitting the user input
-    const onSubmit: SubmitHandler<RegisterFormProps> = async (e) => {
-        
-        await axios.post('/api/user', e)
+    // Function handling submitting user input
+    const onSubmit: SubmitHandler<LoginFormProps> = async (e) => {        
+                
+        // POST request to log in
+        const res = await signIn('credentials', {
+            email: e.email,
+            password: e.password,
+            redirect: false   
+        })
+
+        if (res?.error) {
+            // Show the failure toast                    
+            toast({
+                title: 'Ooops something went wrong!',
+                description: res.error,
+                status: 'error',
+                duration: 3000,
+                isClosable: true
+            })
+        } else {
+            // Show the success toast
+            toast({
+                title: 'Enjoy!',
+                description: 'Successfully logged in!',
+                status: 'success',
+                duration: 3000,
+                isClosable: true
+            })
+            
+            // Redirect the user to their own profile
+            router.push('/profile')
+        }
+                  
+    }
+
+    // Function handling signing in with Google Auth Provider
+    const logInWithGoogle = async () => {
+        await signIn('google')
+        .then(() => {
+            // Show the success toast
+            toast({
+                title: 'Success',
+                description: 'Successfully created an account!',
+                status: 'success',
+                duration: 3000,
+                isClosable: true
+            })
+
+            // Redirect the user to their own profile
+            router.push('/profile')  
+        })
+        .catch(() => {
+            // Show the failure toast
+            toast({
+                title: 'Internal Server Error',
+                description: 'Ooops something went wrong!',
+                status: 'error',
+                duration: 3000,
+                isClosable: true
+            })
+        })
+    }
+
+    // Function handling signing in with Facebook Auth Provider
+    const logInWithFacebook = async () => {
+        await signIn('facebook')
         .then(() => {
             // Show the success toast
             toast({
@@ -103,82 +167,18 @@ export default function RegisterForm() {
         })
     }
 
-    // Function handling signing in with Google Auth Provider
-    const signInWithGoogle = async () => {
-        await signIn('google')
-        .then(() => {
-            // Show the success toast
-            toast({
-                title: 'Success',
-                description: 'Successfully created an account!',
-                status: 'success',
-                duration: 3000,
-                isClosable: true
-            })
-
-            router.push('/profile')  
-        })
-        .catch(() => {
-            // Show the failure toast
-            toast({
-                title: 'Internal Server Error',
-                description: 'Ooops something went wrong!',
-                status: 'error',
-                duration: 3000,
-                isClosable: true
-            })
-        })
-    }
-
-    // Function handling signing in with Facebook Auth Provider
-    const signInWithFacebook = async () => {
-        await signIn('facebook')
-        .then(() => {
-            // Show the success toast
-            toast({
-                title: 'Success',
-                description: 'Successfully created an account!',
-                status: 'success',
-                duration: 3000,
-                isClosable: true
-            })
-
-            router.push('/profile')  
-        })
-        .catch(() => {
-            // Show the failure toast
-            toast({
-                title: 'Internal Server Error',
-                description: 'Ooops something went wrong!',
-                status: 'error',
-                duration: 3000,
-                isClosable: true
-            })
-        })
-    }
-
     return (
         <div>
+            <ResetModal
+                title='Reset Password'
+                isOpen={isOpen}
+                onClose={onClose}
+            />
             <form
                 className='mt-10'
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <Stack spacing={4} >
-                    {/* User name */}
-                    <InputGroup>
-                        <InputLeftElement className='pt-2'>
-                            <Tooltip label='Username' fontSize='md'>
-                                <span><MdAccountCircle size={30} /></span>
-                            </Tooltip>
-                        </InputLeftElement>                    
-                        <Input
-                            variant='filled'
-                            type='text'
-                            placeholder='User name'
-                            size='lg'
-                            {...register('username')}
-                        />                    
-                    </InputGroup>
+                <Stack>
                     {/* Email */}
                     <Controller
                         name="email"
@@ -238,7 +238,8 @@ export default function RegisterForm() {
                         control={control}
                         defaultValue=""
                         rules={{
-                            required: true,
+                            required: 'Please enter your password',
+
                             validate: {
                                 lowercase: (value) => /[a-z]/.test(value) || 'At least one lowercase character',
                                 uppercase: (value) => /[A-Z]/.test(value) || 'At least one uppercase letter',
@@ -280,47 +281,8 @@ export default function RegisterForm() {
                         )}
                     />
                     {/* Password validation prompt */}
-                    <UnorderedList fontSize="sm" color='gray.500' mt="2" ml="5">
-                        <ListItem>
-                            At least one lowercase letter
-                        </ListItem>
-                        <ListItem>
-                            At least one uppecase letter
-                        </ListItem>
-                        <ListItem>
-                            At least one number
-                        </ListItem>
-                        <ListItem>
-                            At least one special character
-                        </ListItem>
-                    </UnorderedList>
-                    {/* Confirm Password */}
-                    <Controller
-                        name="confirmPassword"
-                        control={control}
-                        defaultValue=""
-                        rules={{
-                            required: 'Please confirm your password',
-                            validate: (value) => value === getValues('password') || 'Please confirm your password'
-                        }}
-                        render={({ field }) => (
-                            <InputGroup>
-                                <Tooltip label='Confirm Password'>
-                                    <Input
-                                        {...field}
-                                        {...register('confirmPassword')}
-                                        variant='filled'
-                                        type="password"
-                                        size='lg'
-                                        placeholder="Confirm your password"
-                                    />
-                                </Tooltip>
-                            </InputGroup>
-                        )}
-                    />
-                    {/* Confirm password validation prompt */}
                     <div className='flex'>
-                        {errors.confirmPassword ?
+                        {errors.password ?
                             <MdError
                                 color='red'
                                 size={20}
@@ -334,23 +296,37 @@ export default function RegisterForm() {
                             />
                         }
                         <Text
-                            color={errors.confirmPassword ? 'red.500' : 'green.500'}
+                            color={errors.password ? 'red.500' : 'green.500'}
                         >
-                            {errors.confirmPassword ? errors.confirmPassword.message : 'Please confirm your password'}
+                            {errors.password ? errors.password.message : 'Please enter a valid password'}
                         </Text>
+                    </div>
+                    <div
+                        className='flex mt-6 text-blue-300 px-4 space-x-2'
+                    >
+                        <button
+                            className='hover:underline'
+                            onClick={onOpen}
+                        >
+                            Forgot Password
+                        </button>
+                        <FaExternalLinkAlt
+                            className='mt-1'
+                        />
                     </div>
                     <Button
                         type='submit'
                         variant='outline'
                         colorScheme='blue'
                         size='md'
+                        className='hover:rounded-none duration-300'
                         isLoading={isSubmitting}
-                        mt={5}
+                        mt={7}
                     >
-                        Sign up
+                        Log In
                     </Button>
-                    <div className='text-center mt-2'>
-                        Already have an account? <Link href='/auth/login' className='text-blue-500 hover:underline'>Log in</Link>
+                    <div className='text-center mt-10'>
+                        Don't have an account? <Link href='/auth/signup' className='text-blue-500 hover:underline'>Sign up</Link>
                     </div>
                 </Stack>
             </form>
@@ -365,15 +341,15 @@ export default function RegisterForm() {
                     colorScheme='gray'
                     variant='outline'
                     leftIcon={<FaGoogle />}
-                    onClick={() => signInWithGoogle()}
+                    onClick={() => logInWithGoogle()}
                 >
                     Sign in with Google
-                </Button>             
+                </Button>                
                 <Button
                     colorScheme='facebook'
                     variant='outline'
                     leftIcon={<FaFacebook />}
-                    onClick={() => signInWithFacebook()}
+                    onClick={() => logInWithFacebook()}
                 >
                     Sign in with Facebook
                 </Button>
