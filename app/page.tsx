@@ -8,7 +8,7 @@ import { Feature } from '@/components/Feature'
 
 export default function Home() {
   return (
-    <main>            
+    <main>
         <section className='grid lg:grid-cols-2'>                
             <Hero />                
             <Image

@@ -2,10 +2,10 @@ import './styles/globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Breadcrumb } from '@/components/Breadcrumb'
-import { Header } from '@/components/Header'
 import { Provider } from './context/Provider'
 import { AuthProvider } from './context/AuthProvider'
 import { Footer } from '@/components/Footer'
+
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,9 +24,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           <Provider>            
-            <Breadcrumb />
-            <Header />
-            { children }
+            <Breadcrumb />            
+              <main className='mt-24'>                
+                { children }
+              </main>
             <Footer />                               
           </Provider>           
         </AuthProvider>
