@@ -1,5 +1,5 @@
 import React from 'react'
-import RegisterForm from '@/components/RegisterForm'
+import RegisterForm from '../components/RegisterForm'
 import Image from 'next/image'
 import Logo from '@/public/Funbase.svg'
 import Card from '@/public/Card.svg'

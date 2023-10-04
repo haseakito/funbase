@@ -1,5 +1,5 @@
 import React from 'react'
-import { LoginForm } from '@/components/LoginForm'
+import { LoginForm } from '../components/LoginForm'
 import Image from 'next/image'
 import Logo from '@/public/Funbase.svg'
 import Cloud from '@/public/Cloud.svg'
