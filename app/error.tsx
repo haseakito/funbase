@@ -8,7 +8,7 @@ export default function Error({
     error: Error,
 }) {
     return (
-        <main className="grid min-h-full place-items-center px-6 py-24 sm:py-32 lg:px-8 bg-gray-900">
+        <main className="grid min-h-full place-items-center px-6 py-24 sm:py-32 lg:px-8 dark:bg-gray-800">
             <div className="text-center">
                 <p className="text-base font-semibold text-emerald-700 dark:text-emerald-500">
                     Sorry, there was a problem
@@ -22,9 +22,9 @@ export default function Error({
                 <div className="mt-10 flex items-center justify-center gap-x-6">
                     <Link
                         href='/'
-                        className=""
+                        className="py-2 px-4 rounded-lg hover:rounded-none duration-300 bg-sky-600 hover:bg-sky-500"
                     >
-                        Go back index
+                        Back to Home <span>→</span>
                     </Link>
                 </div>
             </div>
