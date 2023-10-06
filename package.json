@@ -45,6 +45,7 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.45.4",
     "react-icons": "^4.10.1",
+    "sass": "^1.69.0",
     "stripe": "^13.8.0",
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6",
