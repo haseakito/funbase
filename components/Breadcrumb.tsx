@@ -1,16 +1,20 @@
 'use client'
 
-import React, {    
-    useEffect
+import React, {
+    useState,        
 } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import qs from 'query-string'
+import {
+    usePathname,
+    useRouter,
+    useSearchParams
+} from 'next/navigation'
 import {
     MdSearch,
     MdDarkMode,
     MdSunny,
     MdLogout,
 } from 'react-icons/md'
-import Logo from '@/public/Funbase.svg'
 import {
     FaSearch,
     FaBell,
@@ -43,10 +47,16 @@ import {
 } from '@chakra-ui/react'
 import { useSession, signOut } from 'next-auth/react'
 import { MobileSidebar } from './MobileSidebar'
-import Image from 'next/image'
 import { HeaderData } from '@/utils/Constant'
+import { Popup } from './Popup'
 
 export function Breadcrumb() {
+
+    // String state handling storing the search input
+    const [search, setSearch] = useState('')
+
+    // Boolean state handling the modal
+    const [modalOpen, setModalOpen] = useState(false)
 
     // Hooks handling the theme
     const { colorMode, toggleColorMode } = useColorMode()
@@ -60,13 +70,50 @@ export function Breadcrumb() {
     // Hooks handling the router
     const router = useRouter()
 
-    // Side effects handling fetching user profile image and notifications
-    useEffect(() => {
+    // Hooks handling getting the current url's query string
+    const searchParams = useSearchParams()
 
-    }, [])
+    // CategoryId query
+    const currentCategoryId = searchParams.get('categoryId')
+    // Title query
+    const currentTitle = searchParams.get('title')
+
+    const bodyContent = (
+        <div>
+            <InputGroup>
+                <Input
+                    defaultValue={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    size='lg'
+                    placeholder='Search the Funbase'
+                />
+                <InputRightElement>
+                    <Tooltip label='Search' size='lg'>
+                        <span><FaSearch /></span>
+                    </Tooltip>
+                </InputRightElement>
+            </InputGroup>
+        </div>
+    )
+
+    // Funtion handling getting a new url based on search string
+    const onSearch = () => {
+        const url = qs.stringifyUrl({
+            url: path,
+            query: {
+                categoryId: currentCategoryId,
+                title: search
+            }
+        }, {
+            skipNull: true,
+            skipEmptyString: true
+        })
+
+        router.push(url)
+    }
 
     return (
-        <nav className='fixed inset-y-0 h-[80px] w-full z-50 flex justify-between px-5 py-3 shadow-sm text-gray-700 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700'>            
+        <nav className='fixed inset-y-0 h-[80px] w-full z-50 flex justify-between px-5 py-3 shadow-sm border border-gray-200 rounded-lg'>
             <MobileSidebar />
             <div className='hidden lg:flex items-center'>
                 { HeaderData.map((value, key) => (
@@ -82,29 +129,33 @@ export function Breadcrumb() {
                         }                        
                     >
                         { value.title }
-                        <svg aria-hidden="true" className="navbar_externalArrow___VWBd" height="7" viewBox="0 0 6 6" width="7">
+                        <svg aria-hidden="true" className="" height="7" viewBox="0 0 6 6" width="7">
                             <path d="M1.25215 5.54731L0.622742 4.9179L3.78169 1.75597H1.3834L1.38936 0.890915H5.27615V4.78069H4.40513L4.41109 2.38538L1.25215 5.54731Z" fill="var(--accents-3)"></path>
                         </svg>
-                        <span className='h-1 absolute -bottom-0 left-1/2 w-0 bg-black dark:bg-white transition-all duration-500 group-hover:w-1/3'></span>
-                        <span className='h-1 absolute -bottom-0 right-1/2 w-0 bg-black dark:bg-white transition-all duration-500 group-hover:w-1/3'></span>
+                        <span className='h-1 absolute -bottom-0 left-1/2 w-0 bg-black transition-all duration-500 group-hover:w-1/3'></span>
+                        <span className='h-1 absolute -bottom-0 right-1/2 w-0 bg-black transition-all duration-500 group-hover:w-1/3'></span>
                     </Link> 
                 ))}
             </div>
             <InputGroup className='mx-10 lg:mx-40 hidden lg:block'>
                 <Input       
-                    defaultValue=''
+                    defaultValue={search}
+                    onChange={(e) => setSearch(e.target.value)}
                     placeholder='Search Funbase...'
-                    size='md'                        
+                    size='md'
                 />
                 <InputRightElement>
-                    <Tooltip label='Search' size='md'>
+                    <Button
+                        onClick={onSearch}
+                    >
                         <span><FaSearch /></span>
-                    </Tooltip>
+                    </Button>                    
                 </InputRightElement>
             </InputGroup>            
             <div className='flex gap-5'>
                 <Button
                     mt={1}
+                    onClick={() => setModalOpen(!modalOpen)}
                     className='lg:hidden'
                 >
                     <MdSearch />
@@ -171,7 +222,7 @@ export function Breadcrumb() {
                             <MenuDivider />
                             <MenuItem mt={7}>
                                 <Button
-                                    onClick={() => signOut()}
+                                    onClick={() => signOut({ redirect: false }).then(() => router.push('/'))}
                                     className='w-full flex gap-5 font-semibold rounded hover:bg-gray-100 p-2 duration-150'                                    
                                 >
                                     <MdLogout size={20} /> Logout                                
@@ -189,6 +240,13 @@ export function Breadcrumb() {
                     </Button>
                 }
             </div>
+            <Popup
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                bodyContent={bodyContent}
+                action={() => onSearch()}
+                actionLabel='Search'
+            />
         </nav>
     )
 }
