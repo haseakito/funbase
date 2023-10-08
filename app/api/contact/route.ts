@@ -20,14 +20,14 @@ export async function POST(req: NextRequest) {
     const template = {
         from: data.email,
         to: 'haseakito@gmail.com',
-        subject: `Contact from ${ data.name }`,
-        text: `${ data.details } Send from ${ data.name }`,
+        subject: `Contact from ${ data.email}`,
+        text: `${ data.subject } Send from ${ data.email }`,
         html:
-        `
-        <p>Name</p>
-        ${ data.name }
+        `        
         <p>Email Address</p>
         ${ data.email }
+        <p>Subject</p>
+        ${ data.subject }
         <p>Details<p/>
         ${ data.details }
         `

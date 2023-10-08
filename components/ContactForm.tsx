@@ -21,11 +21,16 @@ import {
     useToast,
     FormLabel
 } from '@chakra-ui/react'
+import { useRouter } from 'next/navigation'
+import axios from 'axios'
 
 export function ContactForm() {
 
     // Hooks handling showing the toast
     const toast = useToast()
+
+    // Hooks hand;ling the router
+    const router = useRouter()
 
     const {
         register,
@@ -37,10 +42,9 @@ export function ContactForm() {
     })
 
     // Function handling submitting the user input
-    const onSubmit: SubmitHandler<ContactFormProps> = async () => {
-        fetch('', {
-
-        }).then(() => {
+    const onSubmit: SubmitHandler<ContactFormProps> = async (e) => {
+        axios.post('/api/contact', e)
+        .then(() => {
 
             // Show the success toast
             toast({
@@ -50,6 +54,9 @@ export function ContactForm() {
                 duration: 3000,
                 isClosable: true
             })
+
+            // Refresh the page
+            router.refresh()
         }).catch(() => {
 
             // Show the failure toast

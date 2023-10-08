@@ -50,11 +50,14 @@ jobs:
                 URL: ${{ secrets.URL }}
                 NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
                 GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-                GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-                FACEBOOK_CLIENT_ID: ${{ secrets.FACEBOOK_CLIENT_ID }}
-                FACEBOOK_CLIENT_SECRET: ${{ secrets.FACEBOOK_CLIENT_SECRET }}
+                GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}                
               run: |
                 npm run build
+
+            - name: Apply all pending migrations to the database
+              run: npx prisma migrate deploy
+              env:
+                DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
               # Send success notification to Discord 
             - name: Discord Notification on Success
