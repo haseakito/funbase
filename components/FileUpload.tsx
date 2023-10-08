@@ -33,7 +33,6 @@ export const FileUpload = ({
                     isClosable: true
                 })
             }}
-        >            
-        </UploadDropzone>
+        />
     )
 }
