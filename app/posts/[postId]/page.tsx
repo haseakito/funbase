@@ -40,6 +40,17 @@ export default async function page({ params } : { params: { postId: string } }) 
         throw new Error('Post Not Found')
     }
     
+    const likes = await prisma.like.findMany()
+
+    const like = await prisma.like.findUnique({
+        where: {
+            userId_postId: {
+                userId: session.user.id,
+                postId: params.postId
+            }
+        }
+    })
+
     const isLocked = !purchase
     const isOwned =  session.user.id === post.userId
         
@@ -74,8 +85,11 @@ export default async function page({ params } : { params: { postId: string } }) 
             <div className=''>                
                 <Description
                     postId={post.id!}
+                    isOwned={isOwned}
                     description={post.description!}
                     user={post.user}
+                    like={like}
+                    likesCount={likes.length}
                     updatedAt={post.updatedAt}                    
                 />
             </div>
