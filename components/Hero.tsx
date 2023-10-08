@@ -17,7 +17,7 @@ export function Hero() {
                 <div className='relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20'>
                     The very best quality and speed.
                     <Link
-                        href="#testimonials"
+                        href="#testimonial"
                         className="pl-1 font-semibold text-indigo-600 hover:opacity-80 duration-300"
                     >
                         <span className="absolute inset-0" aria-hidden="true" />
@@ -35,17 +35,17 @@ export function Hero() {
                 <div className='mt-10 flex items-center justify-center gap-x-6'>
                     <Link
                         href='/auth/login'
-                        className='bg-blue-500 p-4 rounded hover:rounded-none font-semibold shadow-sm hover:opacity-90 duration-300 focus:outline-1'
+                        className='relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800'
                     >
-                        Get tarted
+                        <span className='relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0'>
+                            Get tarted
+                        </span>
                     </Link>
                     <Link
-                        href='#blogs'
-                        className='relative group  text-sm font-semibold leading-6 text-gray-900 cursor-pointer'
+                        href='/blogs'
+                        className='py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700'
                     >
-                        Learn More <span>→</span>
-                        <span className='h-1 absolute bottom-0 left-1/2 w-0 bg-black dark:bg-white transition-all duration-500 group-hover:w-1/2'></span>
-                        <span className='h-1 absolute bottom-0 right-1/2 w-0 bg-black dark:bg-white transition-all duration-500 group-hover:w-1/2'></span>
+                        Learn More <span>→</span>                        
                     </Link>
                 </div>
             </div>
