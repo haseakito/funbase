@@ -1,5 +1,4 @@
 [![Build Test](https://github.com/haseakito/funbase/actions/workflows/build.yml/badge.svg)](https://github.com/haseakito/funbase/actions/workflows/build.yml)
-[![Netlify Status](https://api.netlify.com/api/v1/badges/166fa7fc-d5bf-4ae3-b5f0-e7cb2b6d915c/deploy-status)](https://app.netlify.com/sites/spectacular-heliotrope-320230/deploys)
 
 ## About Funbase
 
