@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
@@ -41,19 +42,32 @@ model Session {
 
 // User Model
 model User {
-  id             String    @id @default(cuid())
+  id             String         @id @default(cuid())
   name           String?
-  email          String?   @unique
+  email          String?        @unique
   emailVerified  DateTime?
   image          String?
+  bio            String?
   hashedPassword String?
   posts          Post[]
-  followers      Follows[] @relation("follower")
-  following      Follows[] @relation("following")
+  likes          Like[]
+  StripeAccount  StripeAccount?
+  purchases      Purchase[]
+  followers      Follows[]      @relation("follower")
+  following      Follows[]      @relation("following")
   accounts       Account[]
   sessions       Session[]
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model StripeAccount {
+  id              String   @id @default(uuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeAccountId String   @unique
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 // Follow model
@@ -82,6 +96,8 @@ model Post {
   imageUrl    String?
   muxData     MuxData?
   categories  CategoriesOnPosts[]
+  purchase    Purchase[]
+  likes       Like[]
   price       Float?
   published   Boolean             @default(false)
   userId      String
@@ -107,10 +123,33 @@ model CategoriesOnPosts {
   @@id([postId, categoryId])
 }
 
+// Like model
+model Like {
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId String
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
+}
+
+// Mux data model
 model MuxData {
   id         String  @id @default(uuid())
   assetId    String
   playbackId String?
   postId     String  @unique
   post       Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+// Purchase model
+model Purchase {
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, postId])
 }
