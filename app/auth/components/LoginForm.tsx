@@ -18,10 +18,8 @@ import {
     MdError,
     MdCheckCircle
 } from 'react-icons/md'
-import {
-    FaExternalLinkAlt,
+import {    
     FaGoogle,
-    FaFacebook
 } from 'react-icons/fa'
 import {
     Text,
@@ -35,20 +33,15 @@ import {
     useToast,
     useDisclosure,
     Box,
-    Divider,
-    AbsoluteCenter
+    Divider,    
 } from '@chakra-ui/react'
 import Link from 'next/link'
-import { ResetModal } from '../../../components/ResetModal'
 
 
 export function LoginForm() {
 
     // Boolean state handling revealing the password
     const [show, setShow] = useState(false)
-
-    //
-    const { isOpen, onOpen, onClose } = useDisclosure()
 
     // Hooks handling the user session
     const { data: session, status } = useSession()
@@ -168,12 +161,7 @@ export function LoginForm() {
     }
 
     return (
-        <div>
-            <ResetModal
-                title='Reset Password'
-                isOpen={isOpen}
-                onClose={onClose}
-            />
+        <div>            
             <form
                 className='mt-10'
                 onSubmit={handleSubmit(onSubmit)}
@@ -279,41 +267,7 @@ export function LoginForm() {
                                 </InputRightElement>
                             </InputGroup>
                         )}
-                    />
-                    {/* Password validation prompt */}
-                    <div className='flex'>
-                        {errors.password ?
-                            <MdError
-                                color='red'
-                                size={20}
-                                className='pt-1'
-                            />
-                            :
-                            <MdCheckCircle
-                                color='green'
-                                size={20}
-                                className='pt-1'
-                            />
-                        }
-                        <Text
-                            color={errors.password ? 'red.500' : 'green.500'}
-                        >
-                            {errors.password ? errors.password.message : 'Please enter a valid password'}
-                        </Text>
-                    </div>
-                    <div
-                        className='flex mt-6 text-blue-300 px-4 space-x-2'
-                    >
-                        <button
-                            className='hover:underline'
-                            onClick={onOpen}
-                        >
-                            Forgot Password
-                        </button>
-                        <FaExternalLinkAlt
-                            className='mt-1'
-                        />
-                    </div>
+                    />                    
                     <Button
                         type='submit'
                         variant='outline'
@@ -330,30 +284,17 @@ export function LoginForm() {
                     </div>
                 </Stack>
             </form>
-            <Box position='relative' padding='10'>
+            <Box position='relative' padding='10'>                
                 <Divider />
-                <AbsoluteCenter bg='white' px='4'>
-                    or 
-                </AbsoluteCenter>
-            </Box>
-            <Stack spacing={5}>
-                <Button
-                    colorScheme='gray'
-                    variant='outline'
-                    leftIcon={<FaGoogle />}
-                    onClick={() => logInWithGoogle()}
-                >
-                    Sign in with Google
-                </Button>                
-                <Button
-                    colorScheme='facebook'
-                    variant='outline'
-                    leftIcon={<FaFacebook />}
-                    onClick={() => logInWithFacebook()}
-                >
-                    Sign in with Facebook
-                </Button>
-            </Stack>
+            </Box>            
+            <Button
+                colorScheme='gray'
+                variant='outline'
+                leftIcon={<FaGoogle />}
+                onClick={() => logInWithGoogle()}
+            >
+                Sign in with Google
+            </Button>                                            
         </div>
     )
 }

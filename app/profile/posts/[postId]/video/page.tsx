@@ -8,6 +8,8 @@ import { VideoForm } from './components/VideoForm'
 import { prisma } from '@/libs/db'
 import { Alert, AlertIcon } from '@/components/Chakra'
 import { ProgressBar } from '../components/ProgressBar'
+import { ProceedButton } from '../components/ProceedButton'
+import { ActionButton } from '../components/ActionButton'
 
 
 export default async function page({params} : {params: { postId : string }}) {
@@ -25,10 +27,22 @@ export default async function page({params} : {params: { postId : string }}) {
         throw new Error('Post Not Found')
     }
 
+    const requiredFields = [
+        post.muxData
+    ]
+
+    // Total number of fields to fill before publishing the post
+    const totalFields = requiredFields.length
+    // Subtotal number of fields that are already completed
+    const completedFields = requiredFields.filter(Boolean).length
+
+    // Text showing how many fields are completed 
+    const completionText = `(${completedFields}/${totalFields})`
+
   return (
     <div>
         { !post.published && (
-            <Alert status='warning'>
+            <Alert mt={5} status='warning'>
                 <AlertIcon />
                 This post is not yet published. A few steps away from making your post visible!
             </Alert>
@@ -38,7 +52,7 @@ export default async function page({params} : {params: { postId : string }}) {
         />
         <div className='max-w-5xl mx-auto h-full p-6'>
             <div className='flex items-center justify-between'>
-                <div className=''>
+                <div className='flex items-center justify-between'>
                 <Link
                     href={`/profile/posts/${params.postId}`}
                     className='flex items-center text-sm hover:opacity-75 transition mb-6'
@@ -48,6 +62,9 @@ export default async function page({params} : {params: { postId : string }}) {
                     />
                     Back to edit post
                 </Link>
+                <ActionButton
+                    postId={params.postId}                    
+                />
             </div>
         </div>    
             <div className='flex flex-col gap-y-3'>
@@ -55,7 +72,7 @@ export default async function page({params} : {params: { postId : string }}) {
                     Edit Video
                 </h1>
                 <span className='text-sm text-slate-700'>
-                    Complete all fields
+                    Complete all fields {completionText}
                 </span>        
             </div>
             <div className='mt-14'>
@@ -68,10 +85,17 @@ export default async function page({params} : {params: { postId : string }}) {
                 <div>
                     <VideoForm
                         postId={post.id}
-                        videoUrl=''
+                        videoUrl={post.muxData?.playbackId || ''}
                         muxData={post.muxData}
                     />
                 </div>
+            </div>
+            <div className='flex justify-end mt-10'>
+                <ProceedButton
+                    postId={post.id}
+                    href='price'
+                    disabled={totalFields !== completedFields}
+                />
             </div>        
         </div>
     </div>

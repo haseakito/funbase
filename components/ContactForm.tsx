@@ -21,13 +21,16 @@ import {
     useToast,
     FormLabel
 } from '@chakra-ui/react'
-import SplatterBackGround from '@/public/SplatterBackGround.svg'
-import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import axios from 'axios'
 
 export function ContactForm() {
 
     // Hooks handling showing the toast
     const toast = useToast()
+
+    // Hooks hand;ling the router
+    const router = useRouter()
 
     const {
         register,
@@ -39,10 +42,9 @@ export function ContactForm() {
     })
 
     // Function handling submitting the user input
-    const onSubmit: SubmitHandler<ContactFormProps> = async () => {
-        fetch('', {
-
-        }).then(() => {
+    const onSubmit: SubmitHandler<ContactFormProps> = async (e) => {
+        axios.post('/api/contact', e)
+        .then(() => {
 
             // Show the success toast
             toast({
@@ -52,6 +54,9 @@ export function ContactForm() {
                 duration: 3000,
                 isClosable: true
             })
+
+            // Refresh the page
+            router.refresh()
         }).catch(() => {
 
             // Show the failure toast
@@ -67,15 +72,11 @@ export function ContactForm() {
 
     return (
         <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">
-            <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">Contact Us</h2>
-            <p className="mb-8 lg:mb-16 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">Got a technical issue? Want to send feedback about a beta feature? Talk to us.</p>
-            <div className='absolute w-[400px] lg:w-[600px] rotate-12 -bottom-10 lg:bottom-0 -right-60 md:-right-40 xl:right-10'>
-                <Image
-                    src={SplatterBackGround}
-                    alt=''
-                    className=''
-                />
-            </div>
+            <h2 id='contact' className="group mb-4 text-4xl tracking-tight font-extrabold text-center">
+                <span>Contact Us</span>
+                <a href='#contact' className='ml-2 text-blue-700 opacity-0 transition-opacity dark:text-blue-500 group-hover:opacity-100'>#</a>
+            </h2>
+            <p className="mb-8 lg:mb-16 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">Got a technical issue? Want to send feedback about a beta feature? Talk to us.</p>            
             <form
                 className="space-y-8"
                 onSubmit={handleSubmit(onSubmit)}

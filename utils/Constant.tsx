@@ -1,14 +1,10 @@
 import {
     MdDashboard,
     MdGridOn,
-    MdLogin,
-    MdLogout,
-    MdMenu
 } from 'react-icons/md'
 import {
     FaHeart,
     FaUser,
-    FaBell,
     FaShoppingBag,
 } from 'react-icons/fa'
 
@@ -21,12 +17,16 @@ export const HeaderData = [
     {
         title: 'Posts',
         link: '/posts'
-    },        
+    },
+    {
+        title: 'Blogs',
+        link: '/blogs'
+    }      
 ]
 
 export const SidebarData = [
     {
-        title: 'Dashboard',
+        title: 'Profile',
         icon: <MdDashboard size={30} />,
         link: '/profile'
     },
@@ -46,14 +46,9 @@ export const SidebarData = [
         link: '/profile/follows'
     },
     {
-        title: 'Notifications',
-        icon: <FaBell size={30} />,
-        link: '/profile/notifications'
-    },
-    {
-        title: 'Subscriptions',
+        title: 'Purchases',
         icon: <FaShoppingBag size={30} />,
-        link: '/profile/subscriptions'
+        link: '/profile/purchases'
     }
 ]
 

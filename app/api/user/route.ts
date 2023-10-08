@@ -76,33 +76,3 @@ export async function GET(req: NextRequest) {
     // Return the users
     return NextResponse.json(users, {status: 200})
 }
-
-/**
- * Asynchronous function handling deleting the user
- * 
- * @param req 
- * @returns NextResponse
- */
-export async function DELETE(req: NextRequest) {
-    // Protect this API route by checking the session
-    const session = await getServerSession(authOptions)
-
-    // If user is not logged in, then return an error
-    if (!session) {
-        return NextResponse.json({message: 'Invalid Credentials'}, {status: 403})
-    }
-
-    // Delete the user with his/her userId
-    await prisma.user.delete({
-        where: {
-            id: session.user.id
-        }
-    })
-    .then(() => {
-        return NextResponse.json({message: 'User Successfully Deleted'}, {status: 200})
-    })
-    .catch((err) => {
-        // If there's an error, return an error
-        return NextResponse.json(err, {status: 500})
-    })
-}

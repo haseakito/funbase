@@ -1,23 +1,15 @@
 'use client'
 
 import React, { useState } from 'react'
+import z from 'zod'
 import {
     useForm,
-    Controller,
-    SubmitHandler
+    Controller,    
 } from 'react-hook-form'
 import {    
-    Button,
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-    Stack,
+    Button,    
     InputGroup,
-    InputLeftElement,
-    InputRightElement,
-    Input,
-    Tooltip,
+    Input,    
     useToast,    
 } from '@chakra-ui/react'
 import axios from 'axios'
@@ -28,6 +20,12 @@ type TitleFormProps = {
     postId: string,
     title: string
 }
+
+const formSchema = z.object({
+    title: z.string().min(1, {
+        message: 'Title should not blank'
+    })
+})
 
 export function TitleForm(props: TitleFormProps) {
 
@@ -47,14 +45,14 @@ export function TitleForm(props: TitleFormProps) {
         handleSubmit,
         control,
         formState: { errors, isSubmitting, isValid }
-    } = useForm<TitleFormProps>({
+    } = useForm<z.infer<typeof formSchema>>({
         mode: 'all',
         defaultValues: {            
             title: title
         }
     })
 
-    const onSubmit: SubmitHandler<TitleFormProps> = async (e) => {
+    const onSubmit = async (e: z.infer<typeof formSchema>) => {
         
         await axios.patch(`/api/post/${postId}`, {
             title: e.title
@@ -139,7 +137,7 @@ export function TitleForm(props: TitleFormProps) {
                         colorScheme='green'
                         size='md'
                         className='hover:rounded-none duration-300'
-                        disabled={!isValid}
+                        isDisabled={!isValid}
                         isLoading={isSubmitting}
                         mt={7}
                     >

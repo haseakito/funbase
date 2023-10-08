@@ -8,12 +8,13 @@ import { useRouter } from 'next/navigation'
 
 type ProceedButtonProps = {
     postId: string,
+    href: string,
     disabled: boolean
 }
 
 export function ProceedButton(props: ProceedButtonProps) {
 
-    const { postId, disabled } = props
+    const { postId, href, disabled } = props
  
     // Hooks handling the router
     const router = useRouter()
@@ -24,7 +25,7 @@ export function ProceedButton(props: ProceedButtonProps) {
         variant='outline'
         colorScheme='cyan'
         isDisabled={disabled}
-        onClick={() => router.push(`/profile/posts/${postId}/video`)}
+        onClick={() => router.push(`/profile/posts/${postId}/${href}`)}
     >
         Proceed to next step
     </Button>

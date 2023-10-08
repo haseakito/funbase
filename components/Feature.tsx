@@ -4,7 +4,7 @@ export function Feature() {
     return (
         <div className="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
             <div className="max-w-screen-md mb-8 lg:mb-16">
-                <h2 id='feature' className="group flex justify-start gap-3 mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+                <h2 id='feature' className="group flex justify-start gap-3 mb-4 text-4xl tracking-tight font-extrabold">
                     <span>Designed for creators both big and small</span>
                     <a href='#feature' className='ml-2 text-blue-700 opacity-0 transition-opacity dark:text-blue-500 group-hover:opacity-100'>#</a>
                 </h2>

@@ -8,22 +8,9 @@ import {
 } from 'react-hook-form'
 import {    
     Button,
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-    Stack,
     InputGroup,
-    InputLeftElement,
-    InputRightElement,
-    Input,
-    Tooltip,
+    Input,    
     useToast,
-    useDisclosure,
-    Box,
-    Divider,
-    AbsoluteCenter,
-    Textarea
 } from '@chakra-ui/react'
 import axios from 'axios'
 import { MdEdit } from 'react-icons/md'
@@ -53,11 +40,10 @@ export function PostSetup() {
         control,
         formState: { errors, isSubmitting, isValid }
     } = useForm<PostSetupProps>({
-        mode: 'all',
-        
+        mode: 'all',         
     })
 
-    // Function handling 
+    // Function handling submitting the title
     const onSubmit: SubmitHandler<PostSetupProps> = async (e) => {
         
         await axios.post('/api/post', e)
@@ -74,7 +60,7 @@ export function PostSetup() {
             })
 
             // Redirect the user to their own profile
-            router.push(`/profile/post/${res.data.id}`)
+            router.push(`/profile/posts/${res.data.id}`)
         })
         .catch((err) => {            
             // Show the failure toast
@@ -87,10 +73,7 @@ export function PostSetup() {
                 isClosable: true,
                 position: 'top'
             })        
-        })
-
-        // Refresh the page
-        router.refresh()
+        })        
     }
 
     return (

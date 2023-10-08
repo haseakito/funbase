@@ -3,18 +3,8 @@ import { authOptions } from '@/libs/auth'
 import { getServerSession } from 'next-auth'
 import { prisma } from '@/libs/db'
 import { PostSetup } from '@/components/PostSetup'
-import { Post } from '@prisma/client'
 import { PostCard } from '@/components/PostCard'
 import { Spinner } from '@/components/Chakra'
-
-
-// async function getPosts() {
-//   const res = await fetch(process.env.URL + '/api/post')
-
-//   const posts = await res.json()
-
-//   return posts
-// }
 
 export default async function page() {
 
@@ -48,10 +38,7 @@ export default async function page() {
         <p className='text-sm text-slate-600'>
           What would you like to name your post?
         </p>
-        <PostSetup
-
-        
-        />
+        <PostSetup />
       </div>
       <div className='mt-10'>
         <h1 className='text-2xl'>
@@ -67,8 +54,7 @@ export default async function page() {
                   key={ key }
                   fallback={<Spinner thickness='4px' speed='0.65s' emptyColor='gray.200' color='blue.500' size='xl' />}
               >     
-                <PostCard
-                  
+                <PostCard                  
                   id={value.id}
                   title={value.title}
                   description={value.description}

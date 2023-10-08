@@ -47,14 +47,22 @@ jobs:
               # Build the project
             - name: Build
               env:
+                DATABASE_URL: ${{ secrets.DATABASE_URL }}
                 URL: ${{ secrets.URL }}
+                EMAIL_SERVER_USER: ${{ secrets.EMAIL_SERVER_USER }}
+                EMAIL_SERVER_PASSWORD: ${{ secrets.EMAIL_SERVER_PASSWORD }}
                 NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
                 GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
                 GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-                FACEBOOK_CLIENT_ID: ${{ secrets.FACEBOOK_CLIENT_ID }}
-                FACEBOOK_CLIENT_SECRET: ${{ secrets.FACEBOOK_CLIENT_SECRET }}
+                UPLOADTHING_APP_ID: ${{ secrets.UPLOADTHING_APP_ID }}
+                UPLOADTHING_SECRET: ${{ secrets.UPLOADTHING_SECRET }}
+                MUX_TOKEN_ID: ${{ secrets.MUX_TOKEN_ID }}
+                MUX_TOKEN_SECRET: ${{ secrets.MUX_TOKEN_SECRET }}
+                STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
+                STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+                MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
               run: |
-                npm run build
+                npm run build            
 
               # Send success notification to Discord 
             - name: Discord Notification on Success

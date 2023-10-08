@@ -4,7 +4,6 @@ import { ourFileRouter } from "@/app/api/uploadthing/core"
 import { UploadDropzone } from "@/libs/uploadthing"
 import { useToast } from "@chakra-ui/react"
 
-
 type FileUploadProps = {
     onChange: (url?: string) => void,
     endpoint: keyof typeof ourFileRouter
@@ -19,12 +18,12 @@ export const FileUpload = ({
     const toast = useToast()
 
     return (
-        <UploadDropzone
+        <UploadDropzone                        
             endpoint={endpoint}
             onClientUploadComplete={(res) => {
                 onChange(res?.[0].url)
             }}
-            onUploadError={({ message}) => {
+            onUploadError={({ message }) => {
                 // Show the failure toast                    
                 toast({
                     title: 'Ooops something went wrong!',

@@ -4,8 +4,6 @@ import React, { Suspense, useState } from 'react'
 import MuxPlayer from '@mux/mux-player-react'
 import {
     useForm,
-    Controller,
-    SubmitHandler
 } from 'react-hook-form'
 import {
     MdAddCircle,    
@@ -13,15 +11,12 @@ import {
 } from 'react-icons/md'
 import {    
     Button,    
-    Input,
-    Tooltip,
     useToast,
     Spinner
 } from '@chakra-ui/react'
 import { MdEdit } from 'react-icons/md'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
-import { FileUpload } from '@/app/profile/posts/[postId]/video/components/FileUpload'
+import { FileUpload } from '@/components/FileUpload'
 import { MuxData } from '@prisma/client'
 import axios from 'axios'
 
@@ -45,12 +40,7 @@ export function VideoForm(props: VideoFormProps) {
     // Hooks handling showing the toast
     const toast = useToast()
 
-    const {
-        register,
-        handleSubmit,
-        control,
-        formState: { errors, isSubmitting, isValid }
-    } = useForm<VideoFormProps>({
+    useForm<VideoFormProps>({
         mode: 'all',
         defaultValues: {
             postId: postId,
@@ -146,7 +136,7 @@ export function VideoForm(props: VideoFormProps) {
                                 if (url) {
                                     onSubmit(url)
                                 }
-                            }}
+                            }}                            
                         />
                         <div className='text-xs mt-4'>
                             16:9 aspect ratio recommended

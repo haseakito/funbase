@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/libs/auth"
 import { prisma } from "@/libs/db"
+import bcrypt from 'bcrypt'
 
 /**
  * Asynchronous function handling getting a specific user
@@ -10,7 +11,7 @@ import { prisma } from "@/libs/db"
  * @param param 
  * @returns NextResponse
  */
-export async function GET(req: NextRequest, { param }: { param: { userId: string }}) {
+export async function GET(req: NextRequest, { params }: { params: { userId: string }}) {
     // Protect this API route by checking the session
     const session = await getServerSession(authOptions)
 
@@ -22,7 +23,7 @@ export async function GET(req: NextRequest, { param }: { param: { userId: string
     // Query the user with his/her userId
     const user = await prisma.user.findUnique({
         where: {
-            id: param.userId
+            id: params.userId
         },
         // Exclude the security related fields such as Account, Session, and password
         select: {
@@ -49,41 +50,94 @@ export async function GET(req: NextRequest, { param }: { param: { userId: string
  * @param param 
  * @returns NextResponse
  */
-export async function PUT(req: NextRequest, { param }: { param: { userId: string }}) {
+export async function PATCH(req: NextRequest, { params }: { params: { userId: string }}) {
     // Protect this API route by checking the session
     const session = await getServerSession(authOptions)
+
+    // If user is not logged in, then return an error
+    if (!session?.user) {
+        return NextResponse.json({message: 'Invalid Credentials'}, {status: 403})
+    }
+
+    // If user tries to delete another user, then return an error
+    if (session.user.id !== params.userId) {
+        return NextResponse.json({message: 'Invalid Credentials'}, {status: 403})
+    }
+
+    // Parse the json body
+    const data = await req.json()
+
+
+    // If the user tries to udpate password, hash the password and update it
+    if (data.hashedPassword) {
+            
+        const hashedPassword = await bcrypt.hash(data.hashedPassword, 10)
+
+        await prisma.user.update({
+            where: {
+                id: params.userId
+            },
+            data: {
+                hashedPassword: hashedPassword
+            }
+        })
+        .then(() => {
+            return NextResponse.json({message: 'Successfully updated password'}, {status: 200})
+        })
+        .catch((err) => {
+            return NextResponse.json(err, {status: 500})
+        })
+    }
+
+    // Query the user with his/her userId and update the data
+    const user = await prisma.user.update({
+        where: {
+            id: params.userId
+        },
+        data: {
+            ...data
+        }
+    })
+    .catch((err) => {
+        return NextResponse.json(err, {status: 500})
+    })
+
+    return NextResponse.json(user, {status: 200})
+}
+
+/**
+ * Asynchronous function handling deleting the user
+ * 
+ * @param req 
+ * @returns NextResponse
+ */
+export async function DELETE(req: NextRequest, { params }: { params: { userId: string }}) {
+    // Protect this API route by checking the session
+    const session = await getServerSession(authOptions)
+
+    console.log(params)
 
     // If user is not logged in, then return an error
     if (!session) {
         return NextResponse.json({message: 'Invalid Credentials'}, {status: 403})
     }
 
-    // If user tries to delete another user, then return an error
-    if (session.user?.id !== param.userId) {
+    // If the user is deleting other user, then return an error
+    if (session.user.id !== params.userId) {
         return NextResponse.json({message: 'Invalid Credentials'}, {status: 403})
     }
 
-    // Parse the json body
-    const { name, email, image } = await req.json()
-
-    // Query the user with his/her userId and update the data
-    const user = await prisma.user.update({
+    // Delete the user with his/her userId
+    await prisma.user.delete({
         where: {
-            id: param.userId
-        },
-        data: {
-            name: name,
-            email: email,
-            image: image
-        },
-        select: {
-            id: true,
-            name: true,
-            email: true,
-            followers: true,
-            following: true
+            id: params.userId
         }
     })
-
-    return NextResponse.json(user, {status: 200})
+    .then(() => {
+        return NextResponse.json({message: 'User Successfully Deleted'}, {status: 200})
+    })
+    .catch((err) => {
+        // If there's an error, return an error
+        return NextResponse.json(err, {status: 500})
+    })
 }

@@ -3,5 +3,5 @@ export { default } from 'next-auth/middleware'
 
 // Specific paths or routes on which middleware runs
 export const config = {
-    matcher: ['/users/:path', '/market/:path','/profile/:path'],
+    matcher: ['/users/:path', '/posts/:path','/profile/:path'],
 }

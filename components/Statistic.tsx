@@ -8,7 +8,7 @@ export function Statistic() {
     return (
         <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
             <div className="mx-auto">
-                <h2 id='statistic' className="group flex justify-center gap-3 mb-4 text-4xl tracking-tight font-extrabold text-center text-gray-900 dark:text-white">
+                <h2 id='statistic' className="group flex justify-center gap-3 mb-4 text-4xl tracking-tight font-extrabold text-center">
                     <span>Trusted by creators around the world</span>
                     <a href='#statistic' className='ml-2 text-blue-700 opacity-0 transition-opacity dark:text-blue-500 group-hover:opacity-100'>#</a>
                 </h2>

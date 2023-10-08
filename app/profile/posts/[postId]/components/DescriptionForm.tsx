@@ -1,28 +1,15 @@
 'use client'
 
 import React, { useState } from 'react'
+import z from 'zod'
 import {
     useForm,
-    Controller,
-    SubmitHandler
+    Controller,    
 } from 'react-hook-form'
 import {    
     Button,
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-    Stack,
     InputGroup,
-    InputLeftElement,
-    InputRightElement,
-    Input,
-    Tooltip,
-    useToast,
-    useDisclosure,
-    Box,
-    Divider,
-    AbsoluteCenter,
+    useToast,    
     Textarea
 } from '@chakra-ui/react'
 import axios from 'axios'
@@ -33,6 +20,12 @@ type DescriptionFormProps = {
     postId: string,
     description: string
 }
+
+const formSchema = z.object({
+    description: z.string().min(1, {
+        message: 'Description should not be empty'
+    })  
+})
 
 export function DescriptionForm(props: DescriptionFormProps) {
 
@@ -52,15 +45,14 @@ export function DescriptionForm(props: DescriptionFormProps) {
         handleSubmit,
         control,
         formState: { errors, isSubmitting, isValid }
-    } = useForm<DescriptionFormProps>({
+    } = useForm<z.infer<typeof formSchema>>({
         mode: 'all',
-        defaultValues: {
-            postId: postId,
+        defaultValues: {            
             description: description
         }
     })
 
-    const onSubmit: SubmitHandler<DescriptionFormProps> = async (e) => {
+    const onSubmit = async (e: z.infer<typeof formSchema>) => {
         await axios.patch(`/api/post/${postId}`, {
             description: e.description
         })

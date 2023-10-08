@@ -2,26 +2,18 @@
 
 import React, { Suspense, useState } from 'react'
 import {
-    useForm,
-    Controller,
-    SubmitHandler
-} from 'react-hook-form'
-import {
     MdAddCircle,
     MdImage
 } from 'react-icons/md'
 import {    
-    Button,
-    Input,
-    Tooltip,
+    Button,    
     useToast,
     Spinner
 } from '@chakra-ui/react'
 import axios from 'axios'
 import { MdEdit } from 'react-icons/md'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
-import { FileUpload } from '@/app/profile/posts/[postId]/video/components/FileUpload'
+import { FileUpload } from '@/components/FileUpload'
 
 
 type ImageFormProps = {
@@ -114,10 +106,9 @@ export function ImageForm(props: ImageFormProps) {
                             <Suspense
                                 fallback={<Spinner thickness='4px' speed='0.65s' emptyColor='gray.200' color='blue.500' size='xl' />}
                             >
-                                <Image
+                                <img
                                     src={imageUrl}
-                                    alt=''
-                                    fill
+                                    alt=''                                                                        
                                     className='object-cover rounded-md'
                                 />
                             </Suspense>
