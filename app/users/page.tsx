@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react'
+import { prisma } from '@/libs/db'
 import { Spinner } from '@/components/Chakra'
 import { ProfileCard } from '@/components/ProfileCard'
-import { prisma } from '@/libs/db'
 
 export default async function page() {
 
@@ -24,10 +24,10 @@ export default async function page() {
                     >
                         <ProfileCard
                             key={user.id}                            
-                            id={ user.id }
+                            userId={ user.id }
                             name={ user.name || '' }
-                            profileImage={ user.image || undefined}
-                            description=''
+                            profileImage={ user.image!}
+                            bio={user.bio || ''}
                         />
                     </Suspense>
                 ))}
