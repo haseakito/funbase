@@ -2,25 +2,17 @@
 
 import React, { Suspense, useState } from 'react'
 import {
-    useForm,
-    Controller,
-    SubmitHandler
-} from 'react-hook-form'
-import {
     MdAddCircle,
     MdImage
 } from 'react-icons/md'
 import {    
-    Button,
-    Input,
-    Tooltip,
+    Button,    
     useToast,
     Spinner
 } from '@chakra-ui/react'
 import axios from 'axios'
 import { MdEdit } from 'react-icons/md'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import { FileUpload } from '@/components/FileUpload'
 
 

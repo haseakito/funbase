@@ -3,8 +3,6 @@ import {
     MdDashboard,
     MdImage,
 } from 'react-icons/md'
-
-
 import { TitleForm } from './components/TitleForm'
 import { DescriptionForm } from './components/DescriptionForm'
 import { ImageForm } from './components/ImageForm'
@@ -18,31 +16,29 @@ import { ActionButton } from './components/ActionButton'
 
 export default async function page({params} : {params: { postId : string }}) {
     
+    // Query the post with the postId provided
     const post = await prisma.post.findUnique({
         where: {
             id: params.postId,            
         },
         include: {
-            categories: true
+            categories: {
+                include: {
+                    category: true
+                }
+            }
         }        
     })
 
+    // If there's no post found, then return an error
     if (!post) {
         throw new Error('Post Not Found')
     }
 
-    const categorizedList = await prisma.categoriesOnPosts.findMany({
-        where: {
-            postId: params.postId
-        },
-        select: {
-            category: true
-        }
-    })
-
-
+    // 
     const categories: Category[] = await prisma.category.findMany({})
 
+    // Array list holding the fields to fill
     const requiredFields = [
         post.title,
         post.description,
@@ -101,9 +97,9 @@ export default async function page({params} : {params: { postId : string }}) {
                     />                
                     <CategoryForm
                         postId={post.id}
-                        categories={categorizedList.map((categorized) => ({
-                            value: categorized.category.id,
-                            label: categorized.category.name
+                        categories={post.categories.map((category) => ({
+                            value: category.category.id,
+                            label: category.category.name
                         }))}
                         options={categories.map((category) => ({
                             value: category.id,

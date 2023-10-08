@@ -1,28 +1,29 @@
 'use client'
 
 import React, { useState } from 'react'
+import z from 'zod'
 import {
     useForm,
     Controller,
-    SubmitHandler
 } from 'react-hook-form'
 import {    
     Button,
     InputGroup,
     Input,
-    Tooltip,
     useToast,
 } from '@chakra-ui/react'
 import axios from 'axios'
-import { MdEdit } from 'react-icons/md'
 import { useRouter } from 'next/navigation'
-import { formatPrice } from '@/libs/format'
 import { Popup } from '@/components/Popup'
 
 type PriceFormProps = {
     postId: string,
     price: number
 }
+
+const formSchema = z.object({
+    price: z.number()
+})
 
 export function PriceForm(props: PriceFormProps) {
 
@@ -42,10 +43,9 @@ export function PriceForm(props: PriceFormProps) {
         handleSubmit,
         control,
         formState: { errors, isSubmitting, isValid }
-    } = useForm<PriceFormProps>({
+    } = useForm<z.infer<typeof formSchema>>({
         mode: 'all',
-        defaultValues: {
-            postId: postId,
+        defaultValues: {            
             price: price
         }
     })
@@ -73,6 +73,7 @@ export function PriceForm(props: PriceFormProps) {
         </div>
     )
 
+    // Function handling submitting the price and publish the post
     const onPublishFree = async () => {
         await axios.patch(`/api/post/${postId}`, {
             published: true,
@@ -106,7 +107,7 @@ export function PriceForm(props: PriceFormProps) {
         })
     }
 
-    const onSubmit: SubmitHandler<PriceFormProps> = async (e) => {
+    const onSubmit = async (e: z.infer<typeof formSchema>) => {
         await axios.patch(`/api/post/${postId}`, {
             published: true,
             price: e.price
