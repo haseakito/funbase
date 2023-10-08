@@ -8,16 +8,7 @@ import {
 } from 'react-hook-form'
 import {    
     Button,    
-    FormControl,
-    FormLabel,
-    FormErrorMessage,
-    FormHelperText,
-    Stack,
     InputGroup,
-    InputLeftElement,
-    InputRightElement,
-    Input,
-    Tooltip,
     useToast,    
 } from '@chakra-ui/react'
 import {
@@ -113,11 +104,22 @@ export function CategoryForm(props: CategoryFormProps) {
                 </Button>
             </div>
             {
-                !editing && (
+                !editing &&
+                    categories ?
+                    <div>
+                        {categories.map((category) => (
+                            <span
+                                key={category.value}
+                                className='bg-gray-200 rounded-md p-1 text-sm font-medium'
+                            >
+                                {category.label}
+                            </span>
+                        ))}
+                    </div>    
+                    :
                     <p className='text-sm italic text-slate-600'>
                         Select category
-                    </p>
-                )
+                    </p>            
             }            
             {
                 editing ?
@@ -131,23 +133,24 @@ export function CategoryForm(props: CategoryFormProps) {
                         render={({ field }) => (
                             <InputGroup>
                                 <Select
-                                    {...field}                                    
+                                    {...field}                                                                        
                                     isMulti                                    
                                     options={options}
                                     closeMenuOnSelect
-                                    closeMenuOnScroll={false}
-                                    placeholder='Select one or more categories'                                    
+                                    closeMenuOnScroll={false}                                                                       
+                                    placeholder='Select one or more categories'
+                                    className='w-full'
                                 />
                             </InputGroup>
                         )}
                     />
                     <Button
                         type='submit'
-                        variant='outline'                    
+                        variant='outline'
                         colorScheme='green'
                         size='md'
-                        className='w-full hover:rounded-none duration-300'
-                        disabled={!isValid}
+                        className='w-full'
+                        isDisabled={!isValid}
                         isLoading={isSubmitting}
                         mt={7}
                     >

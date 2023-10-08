@@ -10,12 +10,11 @@ import { useRouter } from 'next/navigation'
 
 type ActionButtonProps = {
   postId: string,
-  isDiabled: boolean
 }
 
 export function ActionButton(props: ActionButtonProps) {
 
-  const { postId, isDiabled } = props
+  const { postId } = props
 
   const [popupOpen, setPopupOpen] = useState(false)
 
@@ -61,47 +60,9 @@ export function ActionButton(props: ActionButtonProps) {
     })
   }
 
-  const onPublish = async () => {
-    await axios.patch(`/api/post/${postId}/`, {
-      published: true
-    })
-    .then(() => {
-      // Show the success toast
-      toast({
-          title: 'Success',
-          description: 'Successfully created a new post!',
-          status: 'success',
-          variant: 'top-accent',
-          duration: 3000,
-          isClosable: true,
-          position: 'top'
-      })
-
-      router.push('/profile/posts')
-    })
-    .catch((err) => {
-        // Show the failure toast
-        toast({
-            title: 'Ooops something went wrong!',
-            description: err,
-            status: 'error',
-            variant: 'top-accent',
-            duration: 3000,
-            isClosable: true,
-            position: 'top'
-        }) 
-    })
-  }
-
   return (
     <div>
-      <div className='space-x-2'>
-        <Button
-          isDisabled={isDiabled}
-          onClick={() => onPublish()}
-        >
-          Publish
-        </Button>
+      <div>        
         <Button
             onClick={() => setPopupOpen(true)}
         >

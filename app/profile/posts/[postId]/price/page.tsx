@@ -1,25 +1,18 @@
 import React from 'react'
-import Link from 'next/link'
-import {
-    MdOutlineArrowCircleLeft,
-    MdVideoLibrary
-} from 'react-icons/md'
-import { VideoForm } from './components/VideoForm'
-import { prisma } from '@/libs/db'
+import { MdOutlineArrowCircleLeft } from 'react-icons/md'
+import {AiFillDollarCircle } from 'react-icons/ai'
 import { Alert, AlertIcon } from '@/components/Chakra'
 import { ProgressBar } from '../components/ProgressBar'
-import { ProceedButton } from '../components/ProceedButton'
+import Link from 'next/link'
+import { PriceForm } from './components/PriceForm'
 import { ActionButton } from '../components/ActionButton'
-
+import { prisma } from '@/libs/db'
 
 export default async function page({params} : {params: { postId : string }}) {
-
+    
     const post = await prisma.post.findUnique({
         where: {
             id: params.postId
-        },
-        include: {
-            muxData: true
         }
     })
 
@@ -28,7 +21,7 @@ export default async function page({params} : {params: { postId : string }}) {
     }
 
     const requiredFields = [
-        post.muxData
+        post.price
     ]
 
     // Total number of fields to fill before publishing the post
@@ -48,25 +41,23 @@ export default async function page({params} : {params: { postId : string }}) {
             </Alert>
         )}
         <ProgressBar
-            index={2}
+            index={3}
         />
         <div className='max-w-5xl mx-auto h-full p-6'>
-            <div className='flex items-center justify-between'>
-                <div className='flex items-center justify-between'>
+            <div className='flex items-center justify-between'>                
                 <Link
-                    href={`/profile/posts/${params.postId}`}
+                    href={`/profile/posts/${params.postId}/video`}
                     className='flex items-center text-sm hover:opacity-75 transition mb-6'
                 >
                     <MdOutlineArrowCircleLeft
                         className='h-4 w-4 mr-2'
                     />
-                    Back to edit post
+                    Back to the previous page
                 </Link>
                 <ActionButton
                     postId={params.postId}                    
                 />
-            </div>
-        </div>    
+            </div>    
             <div className='flex flex-col gap-y-3'>
                 <h1 className='text-2xl font-semibold'>
                     Edit Video
@@ -77,25 +68,17 @@ export default async function page({params} : {params: { postId : string }}) {
             </div>
             <div className='mt-14'>
                 <div className='flex items-center gap-x-2'>
-                    <MdVideoLibrary size={30} className='rounded-full bg-sky-300 text-gray-600' />
-                    <h2 className='text-xl'>
-                        Upload video
+                    <AiFillDollarCircle size={30} className='rounded-full bg-sky-300' />
+                    <h2 className='text-xl font-medium'>
+                        Set price
                     </h2>
                 </div>
                 <div>
-                    <VideoForm
-                        postId={post.id}
-                        videoUrl={post.muxData?.playbackId || ''}
-                        muxData={post.muxData}
+                    <PriceForm
+                        postId={params.postId}
+                        price={post.price || 0}
                     />
                 </div>
-            </div>
-            <div className='flex justify-end mt-10'>
-                <ProceedButton
-                    postId={post.id}
-                    href='price'
-                    disabled={totalFields !== completedFields}
-                />
             </div>        
         </div>
     </div>

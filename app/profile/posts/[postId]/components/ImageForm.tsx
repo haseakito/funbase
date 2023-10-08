@@ -21,7 +21,7 @@ import axios from 'axios'
 import { MdEdit } from 'react-icons/md'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import { FileUpload } from '@/app/profile/posts/[postId]/video/components/FileUpload'
+import { FileUpload } from '@/components/FileUpload'
 
 
 type ImageFormProps = {
@@ -114,10 +114,9 @@ export function ImageForm(props: ImageFormProps) {
                             <Suspense
                                 fallback={<Spinner thickness='4px' speed='0.65s' emptyColor='gray.200' color='blue.500' size='xl' />}
                             >
-                                <Image
+                                <img
                                     src={imageUrl}
-                                    alt=''
-                                    fill
+                                    alt=''                                                                        
                                     className='object-cover rounded-md'
                                 />
                             </Suspense>
