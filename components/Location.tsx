@@ -6,8 +6,10 @@ import { usePathname } from 'next/navigation'
 
 export function Location() {
 
+    // Hooks handling getting the current url path name
     const path = usePathname()
 
+    // Array value storing the nested url routes
     const currentLocation = path.split('/').filter(value => value !== '')
 
   return (
