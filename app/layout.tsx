@@ -4,8 +4,6 @@ import { Inter } from 'next/font/google'
 import { Breadcrumb } from '@/components/Breadcrumb'
 import { Provider } from './context/Provider'
 import { AuthProvider } from './context/AuthProvider'
-import { Footer } from '@/components/Footer'
-
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -27,8 +25,7 @@ export default function RootLayout({
             <Breadcrumb />            
               <main className='mt-24'>                
                 { children }
-              </main>
-            <Footer />                               
+              </main>                           
           </Provider>           
         </AuthProvider>
       </body>

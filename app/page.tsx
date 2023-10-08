@@ -5,6 +5,7 @@ import { Testimonial } from '@/components/Testimonial'
 import { Statistic } from '@/components/Statistic'
 import { ContactForm } from '@/components/ContactForm'
 import { Feature } from '@/components/Feature'
+import { Footer } from '@/components/Footer'
 
 export default function Home() {
   return (
@@ -17,18 +18,19 @@ export default function Home() {
                 className='w-[800px] mt-10 hidden lg:block'
             />
         </section>
-        <section className='bg-white dark:bg-gray-900'>
+        <section>
             <Statistic />
         </section>
-        <section className='bg-white dark:bg-gray-900'>
+        <section>
             <Feature />
         </section>
-        <section className='bg-white dark:bg-gray-900'>
+        <section>
             <Testimonial />
         </section>
-        <section className='relative overflow-hidden bg-white dark:bg-gray-900'>
+        <section className='relative overflow-hidden'>
             <ContactForm />
         </section>
+        <Footer />
     </main>        
     )
 }
