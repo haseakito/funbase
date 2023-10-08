@@ -1,34 +1,82 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+[![Build Test](https://github.com/haseakito/funbase/actions/workflows/build.yml/badge.svg)](https://github.com/haseakito/funbase/actions/workflows/build.yml)
 
-## Getting Started
+## About Funbase
 
-First, run the development server:
+![Funbase](https://github.com/haseakito/funbase/assets/107556045/7a3e01f0-35e0-4e0f-82bc-1d1bd4684960)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+Funbase is a community platform for both creators and fans. Instead of subscription based business model which is not necessarily for everyone, Funbase is focused towards one time purchase to allow more users to directly engage in **getting what they want when they want**. Funbase tries to replace the existing fan club SNS and similar services such as [Fantia](https://fantia.jp/), [myfans](https://myfans.jp/), and [candfans](https://candfans.jp/).
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+Funbase has a set of cool features to explore. Unlike other portfolios, I've deloved the Funbase as ready to scale, super easy to use as anyone from creators to fans, and most importanly monetizable.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Examples of features ls listed as below.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Toggle black and white theme
 
-## Deploy on Vercel
+- Search post and blogs with search query
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Authentication and authorization
+Google OAuth is supported together with email and password
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Add and edit the user profile
+- Add and edit the post details
+
+- Able to follow someone
+- Able to like posts
+- Able to purchase a post
+
+- Read through developer blogs
+
+
+## Technology
+
+Funbase is built on top of **the shoulders of giants** in software engineering. Here is the glimpse of the softwares I've used to develop Funbase.
+
+- [Nextjs](https://nextjs.org/)
+Full stack react framework for the web.
+
+- [Chakra UI](https://chakra-ui.com/)
+Component based UI library.
+
+- [Docker](https://www.docker.com/)
+Docker image for PostgreSQL is used for local development.
+
+- [Prisna ORM](https://www.prisma.io/)
+Nodejs ORM for database operation.
+
+- [Supabase](https://supabase.com/)
+Baas for postgresql database.
+
+- [NextAuth](https://next-auth.js.org/)
+Handling authentication and authorization.
+
+- [uploadThing](https://uploadthing.com/)
+Handling file, image and video upload.
+
+- [Mux](https://www.mux.com/)
+Handling video stream.
+
+- [Stripe](https://stripe.com/)
+Handling payment checkout.
+
+- [microCMS](https://microcms.io/)
+Handling developer blogs.
+
+- [GitHub Actions](https://github.com/features/actions)
+Handling automated testing, building, integration, and deployment.
+
+## Database
+
+Behind the scene, Funbase is built on relational database [PostgreSQL](https://postgresql.org/) to store and retrieve data. I've used [drawSQL](https://drawsql.app/) to create a beautiful SQL diagram.
+![Funbase Database UML](https://github.com/haseakito/funbase/assets/107556045/61928591-af2b-4a5b-860c-061e02fbb1fb)
+
+## Future expectations
+
+Funbase is in the middle of development. As for the future outlook, I consider additional features and breaking changes.
+
+- Add subscription model and allow creators to choose how they charge clients
+- Add gift and tipping for fans to directly support creators
+- Add manga, design post in addition to video post to engage with designers and illustrators
+- Add [Google Analytics](https://analytics.google.com/analytics/academy/course/6) to meature the viewrship
+- Use [Terraform](https://www.terraform.io/) to build the AWS infrastructure
