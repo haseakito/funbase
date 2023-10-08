@@ -9,13 +9,15 @@ import { Description } from './components/Description'
 
 
 export default async function page({ params } : { params: { postId: string } }) {
-
+    // Protect this page by checking the session
     const session = await getServerSession(authOptions)
 
+    // If user is not logged in, then return an error
     if (!session) {
         throw new Error("Unauthorized to perform this action")
     }
 
+    // Query the purchase history with userId and postId provided
     const purchase = await prisma.purchase.findUnique({
         where: {
             userId_postId: {
@@ -25,6 +27,7 @@ export default async function page({ params } : { params: { postId: string } }) 
         }
     })
 
+    // Query the post with the postId provided
     const post = await prisma.post.findUnique({
         where: {
             id: params.postId,
@@ -36,12 +39,15 @@ export default async function page({ params } : { params: { postId: string } }) 
         }
     })
 
+    // If there's no post for this postId, return an error
     if (!post) {
         throw new Error('Post Not Found')
     }
     
+    // Query the likes for this post
     const likes = await prisma.like.findMany()
 
+    // Query the like with the userId and postId provided
     const like = await prisma.like.findUnique({
         where: {
             userId_postId: {
@@ -51,9 +57,10 @@ export default async function page({ params } : { params: { postId: string } }) 
         }
     })
 
+    // Boolean state handling if the user has already purchased the post to give permission to view the post
     const isLocked = !purchase
+    // Boolean state handling if the post belongs the user
     const isOwned =  session.user.id === post.userId
-        
 
   return (
     <div className='max-w-5xl mx-auto h-full p-5'>
