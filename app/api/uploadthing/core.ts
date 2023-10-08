@@ -36,8 +36,17 @@ export const ourFileRouter = {
         .onUploadError(async ({ error }) => {
             throw new Error(error.message)
         })
-        .onUploadComplete(async () => {})
-        
+        .onUploadComplete(async () => {
+
+    }),
+    profileImage: f({ image: { maxFileSize: '1MB', maxFileCount: 1 }})
+        .middleware(async () => await handleAuth())
+        .onUploadError(({ error }) => {
+            throw new Error(error.message)
+        })
+        .onUploadComplete(async () => {
+
+    })
 
 } satisfies FileRouter;
  
