@@ -28,14 +28,14 @@ export default function page() {
 
     return (
         <div className='h-full grid md:grid-cols-2 gap-10 mt-10 mx-3 lg:mx-20'>
-            <section className='bg-white dark:bg-slate-900 lg:mt-10'>
+            <section className='lg:mt-10'>
                 <Image
                     src={Logo}
                     alt=''
                     className='w-24'
                 />
                 <div>
-                    <h2 className='mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl'>
+                    <h2 className='mt-2 text-3xl font-bold tracking-tight sm:text-4xl'>
                         Sign up for absolutely free
                     </h2>
                     <p className='mt-6 text-lg leading-8 text-gray-600'>
@@ -47,7 +47,7 @@ export default function page() {
                                 key={key}
                                 className='relative pl-9'
                             >
-                                <dt className="inline font-semibold text-gray-900">
+                                <dt className="inline font-semibold">
                                     <Image
                                         src={value.icon}
                                         alt=''
@@ -61,7 +61,7 @@ export default function page() {
                     </dl>
                 </div>
             </section>
-            <section className='max-w-2xl bg-white dark:bg-slate-900 mt-10 rounded border shadow p-10'>
+            <section className='max-w-2xl mt-10 rounded border shadow p-10'>
                 <h1 className='text-center text-3xl font-bold '>
                     Login
                 </h1>

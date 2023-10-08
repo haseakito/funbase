@@ -21,7 +21,6 @@ import {
 } from 'react-icons/md'
 import {
     FaGoogle,
-    FaFacebook,
 } from 'react-icons/fa'
 import {
     Text,
@@ -35,8 +34,7 @@ import {
     UnorderedList,
     ListItem,
     Box,
-    Divider,
-    AbsoluteCenter
+    Divider,    
 } from '@chakra-ui/react'
 import Link from 'next/link'
 import axios from 'axios'
@@ -62,7 +60,7 @@ export default function RegisterForm() {
         if (status === "authenticated") {
             router.push(`/profile/`)
         }
-    }, [status, router])    
+    }, [status, router])
 
     const {
         register,
@@ -355,29 +353,16 @@ export default function RegisterForm() {
                 </Stack>
             </form>
             <Box position='relative' padding='10'>
-                <Divider />
-                <AbsoluteCenter bg='white' px='4'>
-                    or 
-                </AbsoluteCenter>
+                <Divider />                
             </Box>
-            <Stack spacing={5}>
-                <Button
-                    colorScheme='gray'
-                    variant='outline'
-                    leftIcon={<FaGoogle />}
-                    onClick={() => signInWithGoogle()}
-                >
-                    Sign in with Google
-                </Button>             
-                <Button
-                    colorScheme='facebook'
-                    variant='outline'
-                    leftIcon={<FaFacebook />}
-                    onClick={() => signInWithFacebook()}
-                >
-                    Sign in with Facebook
-                </Button>
-            </Stack>
+            <Button
+                colorScheme='gray'
+                variant='outline'
+                leftIcon={<FaGoogle />}
+                onClick={() => signInWithGoogle()}
+            >
+                Sign in with Google
+            </Button>             
         </div>
     )
 }
