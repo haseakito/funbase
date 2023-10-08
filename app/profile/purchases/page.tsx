@@ -8,12 +8,15 @@ import { PostCard } from '@/components/PostCard'
 
 export default async function page() {
 
+  // Protect this API route by checking the session
   const session = await getServerSession(authOptions)
 
+  // If user is not logged in, then redirect the user back
   if (!session) {
     redirect('/')
   }
 
+  // Query the purchases history
   const purchases = await prisma.purchase.findMany({
     where: {
       userId: session.user.id
