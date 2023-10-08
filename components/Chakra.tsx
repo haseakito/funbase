@@ -4,5 +4,6 @@ export {
     Spinner,
     Alert,
     AlertIcon,
-    Button   
+    Button,
+    Divider
 } from '@chakra-ui/react'
