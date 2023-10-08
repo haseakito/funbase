@@ -136,30 +136,31 @@ export function Breadcrumb() {
                         <span className='h-1 absolute -bottom-0 right-1/2 w-0 bg-black transition-all duration-500 group-hover:w-1/3'></span>
                     </Link> 
                 ))}
-            </div>
+            </div>            
             <InputGroup className='mx-10 lg:mx-40 hidden lg:block'>
-                <Input       
-                    defaultValue={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder='Search Funbase...'
-                    size='md'
-                />
-                <InputRightElement>
-                    <Button
-                        onClick={onSearch}
-                    >
-                        <span><FaSearch /></span>
-                    </Button>                    
-                </InputRightElement>
+                    <Input       
+                        defaultValue={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder='Search Funbase...'
+                        size='md'
+                    />
+                    <InputRightElement>
+                        <Button
+                            onClick={onSearch}
+                        >
+                            <span><FaSearch /></span>
+                        </Button>                    
+                    </InputRightElement>                
             </InputGroup>            
             <div className='flex gap-5'>
-                <Button
-                    mt={1}
-                    onClick={() => setModalOpen(!modalOpen)}
-                    className='lg:hidden'
-                >
-                    <MdSearch />
-                </Button>
+                <div className='lg:hidden'>
+                    <Button
+                        mt={1}                    
+                        onClick={() => setModalOpen(!modalOpen)}
+                    >
+                        <MdSearch />
+                    </Button>
+                </div>
                 {/* Theme */}
                 <Button
                     mt={1}

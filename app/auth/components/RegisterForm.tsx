@@ -128,33 +128,6 @@ export default function RegisterForm() {
         })
     }
 
-    // Function handling signing in with Facebook Auth Provider
-    const signInWithFacebook = async () => {
-        await signIn('facebook')
-        .then(() => {
-            // Show the success toast
-            toast({
-                title: 'Success',
-                description: 'Successfully created an account!',
-                status: 'success',
-                duration: 3000,
-                isClosable: true
-            })
-
-            router.push('/profile')  
-        })
-        .catch(() => {
-            // Show the failure toast
-            toast({
-                title: 'Internal Server Error',
-                description: 'Ooops something went wrong!',
-                status: 'error',
-                duration: 3000,
-                isClosable: true
-            })
-        })
-    }
-
     return (
         <div>
             <form
@@ -358,6 +331,7 @@ export default function RegisterForm() {
             <Button
                 colorScheme='gray'
                 variant='outline'
+                w='full'
                 leftIcon={<FaGoogle />}
                 onClick={() => signInWithGoogle()}
             >

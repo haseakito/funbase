@@ -4,7 +4,7 @@ import React, {
     useState,
     useEffect
 } from 'react'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useSession, signIn  } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { LoginFormProps } from '@/utils/types/User'
 import {
@@ -30,8 +30,7 @@ import {
     InputRightElement,
     Input,
     Tooltip,
-    useToast,
-    useDisclosure,
+    useToast,    
     Box,
     Divider,    
 } from '@chakra-ui/react'
@@ -130,35 +129,7 @@ export function LoginForm() {
                 isClosable: true
             })
         })
-    }
-
-    // Function handling signing in with Facebook Auth Provider
-    const logInWithFacebook = async () => {
-        await signIn('facebook')
-        .then(() => {
-            // Show the success toast
-            toast({
-                title: 'Success',
-                description: 'Successfully created an account!',
-                status: 'success',
-                duration: 3000,
-                isClosable: true
-            })
-
-            // Redirect the user to their own profile
-            router.push('/profile')
-        })
-        .catch(() => {
-            // Show the failure toast
-            toast({
-                title: 'Internal Server Error',
-                description: 'Ooops something went wrong!',
-                status: 'error',
-                duration: 3000,
-                isClosable: true
-            })
-        })
-    }
+    }    
 
     return (
         <div>            
@@ -291,6 +262,7 @@ export function LoginForm() {
                 colorScheme='gray'
                 variant='outline'
                 leftIcon={<FaGoogle />}
+                w='full'
                 onClick={() => logInWithGoogle()}
             >
                 Sign in with Google
