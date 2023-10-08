@@ -23,18 +23,24 @@ export function CategoryItem(props: CategoryItemProps) {
 
     const { id, name, icon } = props
 
+    // Hooks handling getting the current url path name
     const path = usePathname()
 
+    // Hooks handling the router
     const router = useRouter()
 
+    // Hooks handling getting the current url's query string
     const searchParams = useSearchParams()
 
+    // CategoryId query
     const currentCategoryId = searchParams.get('categoryId')
+    // Title query
     const currentTitle = searchParams.get('title')
 
+    // Boolean state if the current categoryId query is the same as id provided
     const isSelected = currentCategoryId === id
 
-
+    // Funtion handling getting a new url based on search string
     const onClick = async () => {
       const url =  qs.stringifyUrl({
         url: path,

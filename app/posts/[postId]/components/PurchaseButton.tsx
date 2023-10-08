@@ -18,17 +18,22 @@ export function PurchaseButton(props: PurchaseButtonProps) {
 
   const { postId, price } = props
 
+  // Boolean state handling the loading for api call
   const [loading, setLoading] = useState(false)
 
   // Hooks handling showing the toast
   const toast = useToast()
 
+  // Function handling checkout the post 
   const onClick = async () => {
+    // Start API call
+    setLoading(true)
+
+    // Send post request to the server
     await axios.post(`/api/post/${postId}/checkout`)
     .then((res) => {
       
-      setLoading(true)
-
+      // Redirect the user to the url in the server response
       window.location.assign(res.data.url)
       
     })
