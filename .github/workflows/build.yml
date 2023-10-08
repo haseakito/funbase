@@ -62,12 +62,7 @@ jobs:
                 STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
                 MICROCMS_API_KEY: ${{ secrets.MICROCMS_API_KEY }}
               run: |
-                npm run build
-
-            - name: Apply all pending migrations to the database
-              run: npx prisma migrate deploy
-              env:
-                DATABASE_URL: ${{ secrets.DATABASE_URL }}
+                npm run build            
 
               # Send success notification to Discord 
             - name: Discord Notification on Success
