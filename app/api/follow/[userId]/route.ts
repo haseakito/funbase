@@ -3,31 +3,69 @@ import { authOptions } from "@/libs/auth"
 import { getServerSession } from "next-auth"
 import { prisma } from "@/libs/db"
 
-/**
- * Asynchronous function handling following a specific user
- * 
- * @param param
- * @returns NextResponse
- */
-export async function POST(req: NextRequest, { param }: { param: { userId: string }}) {
+export async function GET(req: NextRequest, { params }: { params: { userId: string } }) {
     // Protect this API route by checking the session
     const session = await getServerSession(authOptions)
 
     // If user is not logged in, then return an error
-    if (!session?.user.id) {
+    if (!session) {
+        return NextResponse.json({message: 'Invalid Credentials'}, {status: 403})
+    }
+
+    // Query the follow with the folloerId and followingId provided
+    const follow = await prisma.follows.findUnique({
+        where: {
+            followerId_followingId: {
+                followerId: session.user.id,
+                followingId: params.userId
+            }
+        }
+    })
+    .catch((err) => {
+        return NextResponse.json(err, {status: 500})
+    })
+
+    if (!follow) {
+        return NextResponse.json(null, {status: 202})
+    }
+
+    return NextResponse.json(follow, {status: 200})
+}
+
+export async function POST(req: NextRequest, { params }: { params: { userId: string } }) {
+    // Protect this API route by checking the session
+    const session = await getServerSession(authOptions)
+
+    // If user is not logged in, then return an error
+    if (!session) {
         return NextResponse.json({message: 'Invalid Credentials'}, {status: 403})
     }
 
     // If users follows themselves, return an error
-    if (session.user.id === param.userId) {
+    if (session.user.id === params.userId) {
         return NextResponse.json({message: 'Invalid Credentials'}, {status: 403})
+    }
+
+    // Query the follow with followerId and followingId provided
+    const follow = await prisma.follows.findUnique({
+        where: {
+            followerId_followingId: {
+                followerId: session.user.id,
+                followingId: params.userId   
+            }
+        }
+    })
+
+    // Check if the user has already followed
+    if (follow) {
+        return NextResponse.json({message: 'Already followed'}, {status: 500 })
     }
 
     // Create the new follow
     await prisma.follows.create({
         data: {     
             followerId: session.user.id,
-            followingId: param.userId
+            followingId: params.userId
         }
     })
     .then(() => {
